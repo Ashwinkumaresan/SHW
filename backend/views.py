@@ -17,7 +17,7 @@ class Home(APIView):
     def get(self,request):
         return JsonResponse({"Hello":"Content"})    
     
-class ProfileDetailView(generics.RetrieveAPIView):
+"""class ProfileDetailView(generics.RetrieveAPIView):
     queryset=UserProfileModel.objects.all()
     serializer_class=ProfileSerializer
 
@@ -25,6 +25,19 @@ class ProfileDetailView(generics.RetrieveAPIView):
         user=self.request.user
         if user is None or user.is_anonymous:
             return JsonResponse({"Login":"Not_logined"},status=status.HTTP_403_FORBIDDEN)
+        data=UserProfileModel.objects.get(User=user)
+        serilaize=ProfileSerializer(data).data
+        serilaize['Login']="success"
+        return JsonResponse(serilaize,status=200)
+    """
+
+class ProfileDetailView(generics.RetrieveAPIView):
+    queryset=UserProfileModel.objects.all()
+    serializer_class=ProfileSerializer
+
+    def get(self, request, *args, **kwargs):
+        user=self.request.user
+        user=User.objects.get(username='Ashwin')
         data=UserProfileModel.objects.get(User=user)
         serilaize=ProfileSerializer(data).data
         serilaize['Login']="success"
