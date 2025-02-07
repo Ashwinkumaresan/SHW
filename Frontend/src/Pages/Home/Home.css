@@ -1,0 +1,96 @@
+@import url('https://fonts.googleapis.com/css2?family=Playwrite+IN:wght@100..400&display=swap');
+.playwritter{
+    font-family: "Playwrite IN", serif;
+    color: #1E88E5;
+}
+.hero, .Reimbursement{
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+.img_con{
+    display: flex;
+    flex-wrap: wrap;
+}
+.img_con img{
+    width: 100%;
+    height: 350px;
+}
+.box_row button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+}
+.box_row{
+    color: white;
+}
+.box_row h1{
+    font-family: "Playwrite IN", serif;
+}
+.for_family{
+    width: 100%;
+    height: 250px;
+    background-image: url("for_family.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 8px;
+}
+.for_individual{
+    width: 100%;
+    height: 250px;
+    background-image: url("for_individual.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 8px;
+}
+.for_advisor{
+    width: 100%;
+    height: 250px;
+    background-image: url("for_advisor.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 8px;
+}
+.for_gaurdian{
+    width: 100%;
+    height: 250px;
+    background-image: url("for_gaurdian.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 8px;
+}
+.premium{
+    width: 100%;
+    min-height: 100vh;
+}
+.premium_data{
+    width: 100%;
+    min-height: 100vh;
+    background-color: #387881;
+    color: white;
+}
+.premium_img{
+    width: 100%;
+    height: 800px;
+    background-image: url("premium_data.svg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size:contain;
+    border-radius: 8px;
+}
+@media only screen and (max-width:600px){
+    .premium_img{
+        height: 300px;
+    }
+}
+@media only screen and (max-width:800px){
+    .premium_img{
+        height: 400px;
+    }
+}
