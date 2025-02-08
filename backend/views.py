@@ -7,15 +7,22 @@ from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import generics,views,serializers,status
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.permissions import IsAuthenticated
 
-
+from .serializers import MyTokenObtainPairSerializer
 from .models import UserProfileModel
 from .serializers import ProfileSerializer,PaitentRegister
 # Create your views here.
 
 class Home(APIView):
     def get(self,request):
-        return JsonResponse({"Hello":"Content"})    
+        return JsonResponse({"Hello":"Content"})   
+
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer 
     
 """class ProfileDetailView(generics.RetrieveAPIView):
     queryset=UserProfileModel.objects.all()
@@ -34,6 +41,7 @@ class Home(APIView):
 class ProfileDetailView(generics.RetrieveAPIView):
     queryset=UserProfileModel.objects.all()
     serializer_class=ProfileSerializer
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         user=self.request.user
