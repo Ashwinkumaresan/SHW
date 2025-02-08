@@ -60,7 +60,6 @@ class UserProfileModel(models.Model):
         # super().save(*args, **kwargs)
         if self.MedicalID is None:
             self.MedicalID=generate_MedicalId()
-        if self.QRCode is None:
             URL=f"http://127.0.0.1:8000/record/{self.MedicalID}"
             qr = qrcode.QRCode(version=1, box_size=10, border=5)
             qr.add_data(URL)
