@@ -19,8 +19,6 @@ class Home(APIView):
     def get(self,request):
         return JsonResponse({"Hello":"Content"})   
 
-
-
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer 
     
@@ -40,30 +38,14 @@ class ProfileDetailView(generics.RetrieveAPIView):
         serilaize=ProfileSerializer(data).data
         serilaize['Login']="success"
         return JsonResponse(serilaize,status=200)
-  
-
-# class ProfileDetailView(generics.RetrieveAPIView):
-#     queryset=UserProfileModel.objects.all()
-#     serializer_class=ProfileSerializer
-#     permission_classes = [IsAuthenticated]
-
-#     def get(self, request, *args, **kwargs):
-#         user=self.request.user
-#         user=User.objects.get(username='Ashwin')
-#         data=UserProfileModel.objects.get(User=user)
-#         serilaize=ProfileSerializer(data).data
-#         serilaize['Login']="success"
-#         return JsonResponse(serilaize,status=200)
     
 ProfileDetailViewClass=ProfileDetailView.as_view()
 
 class LoginView(views.APIView):
-
     permission_classes=[]
 
     def post(self, request, *args, **kwargs):
-        # username = request.data.get('username')
-        # password = request.data.get('password')
+
         data=json.loads(request.body)
         username=data.get('username')
         password=data.get('password')
@@ -124,8 +106,14 @@ class paitentRegister(generics.CreateAPIView):
         username=serializer.validated_data.get("username")
         qs=User.objects.filter(username=username)
         if qs.exists():
-            return Response({"Register":"Username already exisit"},status=status.HTTP_403_FORBIDDEN)
+            return JsonResponse({"Register":"Username already exisit"},status=status.HTTP_403_FORBIDDEN)
         password=serializer.validated_data.get("password")
-        verify=serializer.validated_data.get()
-        return super().perform_create(serializer)
-        
+        verify=serializer.validated_data.pop('verify_password')
+        if(password!=verify):
+            return JsonResponse({'Register':"failed check password"},status=status.HTTP_403_FORBIDDEN)
+        # super().perform_create(serializer)
+        serializer.save()
+        print("HELLO CHECK")
+        return JsonResponse({'Register':"Success"},status=status.HTTP_200_OK)
+
+paitentRegisterClass=paitentRegister.as_view()

@@ -27,13 +27,13 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class PaitentRegister(serializers.ModelSerializer):
 
-    Verify=serializers.CharField(write_only=True)
+    verify_password=serializers.CharField(write_only=True)
     class Meta:
         model=User
         fields=[
             'username',
             'password',
-            'verify'
+            'verify_password'
         ]
         
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
