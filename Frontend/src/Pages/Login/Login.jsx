@@ -49,6 +49,8 @@ export const Login = () => {
               const data = await res.json();
               localStorage.setItem("access_token", data.access);
               localStorage.setItem("refresh_token", data.refresh);
+
+              navigate(response.data.redirect);
         
         } catch (error) {
             console.error("Error sending data:", error);

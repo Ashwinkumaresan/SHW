@@ -13,8 +13,19 @@ export const Profile = () => {
   const [location, setLocation] = useState("")
 
   const fetchData = async (e) => {
+    const token = localStorage.getItem("access_token")
+    if(!token){
+      console.log("Token not available")
+      return
+    }
     try{
-      const response = await fetch('http://127.0.0.1:8000/profile/')
+      const response = await fetch('http://127.0.0.1:8000/profile/',{
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+          },
+      })
       const data = await response.json()
       const qr = `http://127.0.0.1:8000/${data.QRCode}`
       const profil_pic = `http://127.0.0.1:8000/${data.ProfilePic}`
