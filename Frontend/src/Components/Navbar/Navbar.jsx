@@ -1,8 +1,17 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavLink } from "react-router";
 import "./Navbar.css"
 
 export const Navbar = () => {
+  const [button, setButton] = useState("Login")
+  const [link, setLink] = useState("/login")
+  useEffect(()=>{
+
+    if(localStorage.getItem("access_token")){
+      setButton("Profile")
+      setLink("/profile")
+    }
+  },[])
   return (
     <>
           <nav class="navbar navbar-expand-lg nav_bar" >
@@ -36,8 +45,8 @@ export const Navbar = () => {
         </li>
       </ul>
     </div>
-    <NavLink to="/login" end>
-      <button className='btn btn-primary px-4 rounded-pill'>Login</button>
+    <NavLink to={link} end>
+      <button className='btn btn-primary px-4 rounded-pill'> {button} </button>
     </NavLink>
   </div>
 </nav>
