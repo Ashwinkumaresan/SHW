@@ -29,7 +29,13 @@ class ProfileDetailView(generics.RetrieveAPIView):
     serializer_class=ProfileSerializer
 
     def get(self, request, *args, **kwargs):
-        user=request.user
+        auth = self.request.headers.get("Authorization")
+        if auth:
+            token = auth.split(" ")[1]
+            print(token)
+        print("check")
+        print(self.request.user)
+        user=self.request.user
         data=UserProfileModel.objects.get(User=user)
         serilaize=ProfileSerializer(data).data
         serilaize['Login']="success"
