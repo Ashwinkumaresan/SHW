@@ -3,7 +3,13 @@
     min-height: 100vh;
     overflow-x: hidden;
     background-color: white;
+    position: relative;
     /* background-color: #f0f8ff; */
+}
+.profile .back{
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 .profile_pic{
     border-radius: 8px;

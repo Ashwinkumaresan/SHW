@@ -6,6 +6,7 @@ export const Signup = () => {
     const [formData, setFormData] = useState({
         username: "",
         password: "",
+        verify_password:"",
     });
 
     // Handle input changes
@@ -36,13 +37,25 @@ export const Signup = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://127.0.0.1:8000/login/", formData, {
+            const response = await axios.post("http://127.0.0.1:8000/signup/", formData, {
                 headers: {
                     "Content-Type": "application/json",
                 }
             });
             console.log(response.data);
             alert("Data sent successfully!");
+            const res = await fetch("http://127.0.0.1:8000/token/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
+              });
+              if (!res.ok) throw new Error("Invalid username or password!!");
+        
+              const data = await res.json();
+              localStorage.setItem("access_token", data.access);
+              localStorage.setItem("refresh_token", data.refresh);
+
+              navigate(response.data.redirect);
         } catch (error) {
             console.error("Error sending data:", error);
             alert("Error: " + (error.response?.data?.error || "Unknown error"));
@@ -74,6 +87,15 @@ export const Signup = () => {
                                 type="password"
                                 name="password"
                                 placeholder="Enter password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                style={{width:"100%"}}
+                                className='mb-4 p-2'
+                            />
+                            <input
+                                type="password"
+                                name="verify_password"
+                                placeholder="Confirm password"
                                 value={formData.password}
                                 onChange={handleChange}
                                 style={{width:"100%"}}

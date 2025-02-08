@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from "react-router-dom";
 import "./Profile.css"
 
 export const Profile = () => {
+  const navigate = useNavigate(); // Ensure it's inside the component
+  
   const [medicalId, setMedicalId] = useState("medical id")
   const [username, setUsername] = useState("medical id")
   const [gender, setGender] = useState("medical id")
@@ -15,7 +18,7 @@ export const Profile = () => {
   const fetchData = async (e) => {
     const token = localStorage.getItem("access_token")
     if(!token){
-      console.log("Token not available")
+      navigate("/login");
       return
     }
     try{
@@ -73,6 +76,9 @@ export const Profile = () => {
   return (
     <>
     <div className="profile">
+      <a href="/" className='back'>
+        <button className='btn fw-bold' >Back</button>
+      </a>
       <div className="container p-md-0 p-3">  
         <div className="row mb-5">
           <div className="col-12 col-md-7 col-lg-7 col-xl-7 col-xxl-7 rounded  mt-5">
