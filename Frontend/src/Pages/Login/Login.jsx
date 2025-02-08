@@ -34,11 +34,22 @@ export const Login = () => {
 
             if (response.status === 200) { // Check if request was successful
             console.log("Redirecting to:", response.data.redirect);
-            navigate(response.data.redirect); // Navigate to profile
+            //navigate(response.data.redirect); // Navigate to profile
             } else {
             setError(response.data.error || "Something went wrong.");
             console.error("Error:", response.data.error);
             }
+            const res = await fetch("http://127.0.0.1:8000/token/", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(formData),
+              });
+              if (!res.ok) throw new Error("Invalid username or password!!");
+        
+              const data = await res.json();
+              localStorage.setItem("access_token", data.access);
+              localStorage.setItem("refresh_token", data.refresh);
+        
         } catch (error) {
             console.error("Error sending data:", error);
             setInvalid(true)
