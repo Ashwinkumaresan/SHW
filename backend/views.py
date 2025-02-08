@@ -30,8 +30,6 @@ class ProfileDetailView(generics.RetrieveAPIView):
 
     def get(self, request, *args, **kwargs):
         user=request.user
-        if user is None or user.is_anonymous:
-            return JsonResponse({"Login":"Not_logined"},status=status.HTTP_403_FORBIDDEN)
         data=UserProfileModel.objects.get(User=user)
         serilaize=ProfileSerializer(data).data
         serilaize['Login']="success"
