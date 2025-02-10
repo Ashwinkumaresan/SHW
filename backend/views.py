@@ -133,6 +133,7 @@ class RecordDetail(generics.RetrieveAPIView):
         
         UserProfile=UserProfileModel.objects.get(MedicalID=MedicalID)
         qs=MedicalRecordModel.objects.filter(UserProfile=UserProfile)
+        UserSerialize=ProfileSerializer(qs)
 
         Record=qs.order_by('-Date').first()
         serialize=MedicalRecordSerializer(Record).data
@@ -143,7 +144,7 @@ class RecordDetail(generics.RetrieveAPIView):
         serialize['Country']=Record.UserProfile.Country
         serialize['Address']=Record.UserProfile.Address
         serialize['phoneNumber']=Record.UserProfile.PhoneNumber
-        serialize['QRcode']=Record.UserProfile.QRCode
+        serialize['QRcode']=UserSerialize.data.get("QRCode")
         print(serialize)
         return JsonResponse(serialize,status=status.HTTP_200_OK)
     
