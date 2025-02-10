@@ -6,7 +6,8 @@ import html2canvas from "html2canvas";
 
 import "./MedicalRecord.css"
 
-export const MedicalRecord = () => {
+export const MedicalRecord = ( {word} ) => {
+  console.log(word)
     const navigate = useNavigate(); // Ensure it's inside the component
 
     const [name, setName] = useState("name")
@@ -21,6 +22,8 @@ export const MedicalRecord = () => {
     const [testConducted, setTestConducted] = useState("test conducted")
     const [treatmentPlan, setTreatementPlan] = useState("plan")
     const [aditionalNotes, setADitionalNotes] = useState("aditional plan")
+    const [hospitalName, setHospitalName] = useState("")
+    const [doctorName, setDoctorName] = useState("")
     const contentRef = useRef(null);
 
     const handleDownload = () => {
@@ -35,31 +38,39 @@ export const MedicalRecord = () => {
         const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
   
         pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-        pdf.save("content.pdf"); // Download the file
+        pdf.save(`${word}.pdf`); // Download the file
       });
     };
     const fetchData = async (e) => {
         const token = localStorage.getItem("access_token")
-        if(!token){
-          navigate("/login");
-          return
-        }
+        // if(!token){
+        //   navigate("/login");
+        //   return
+        // }
         try{
-          const response = await fetch('http://127.0.0.1:8000/profile/',{
+          const response = await fetch(`http://127.0.0.1:8000/record/detail/${word}`,{
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
+              // 'Authorization': `Bearer ${token}`,
               },
           })
           const data = await response.json()
           console.log(data)
-          setName(data.User)
+          setName(data.Patient_Name)
           setAge(data.Age)
-          setDob(data.DateOfBirth)
+          setDob(data.Date)
           setGender(data.Gender)
           setCountry(data.Country)
           setAddress(data.Address)
+          setSympotoms(data.Symptoms)
+          setTestConducted(data.TestsConducted)
+          setDiagnosis(data.Diagnosis)
+          setTreatementPlan(data.TreatmentPlan)
+          setADitionalNotes(data.AdditionalNotes)
+          setPhone(data.phoneNo)
+          setHospitalName(data.HospitalName)
+          setDoctorName(data.Doctor)
         }catch(error){
             console.log(error)
         }
@@ -81,7 +92,10 @@ export const MedicalRecord = () => {
         <p class=" fs-3 m-0"><span class = " fw-bold ">Phone no:</span> {phone} </p>
         <p class=" fs-3 m-0"><span class = " fw-bold ">Address:</span> {address} </p>
         <p class=" fs-3 m-0 mb-5"><span class = " fw-bold ">Country:</span> {country} </p>
-        <hr />
+        <hr className='mb-5'/>
+        <p class=" fs-3 m-0"><span class = " fw-bold ">Doctor LN:</span> { doctorName } </p>
+        <p class=" fs-3 m-0"><span class = " fw-bold ">Hospital name:</span> { hospitalName } </p>
+        <hr className='my-5'/>
         <h4 class="mt-3 fw-bold">Sympotoms:</h4>
         <p class=" fs-3 m-0 ms-5"> {sympotoms} </p>
         <h4 class="mt-3 fw-bold">Diagnosis:</h4>
