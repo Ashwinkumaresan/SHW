@@ -10,5 +10,11 @@ urlpatterns=[
     path('profile/',views.ProfileDetailViewClass,name="Profile page"),
     path('login/',views.LoginViewClass,name="Login"),
     path('signup/',views.paitentRegisterClass,name="paitent Register"),
-    path('profile/update/<str:MedicalID>',views.ProfileUpdateClass,name="Update the profile")
+    path('profile/update/<str:MedicalID>',views.ProfileUpdateClass,name="Update the profile"),
+    path('record/histroy/',views.RecordHistroyClass,name="Medical Record Histroy"),
+    path('record/detail/<str:MedicalID>',views.RecordDetailClass,name="Medical Record"),
+    path('blog/',views.ListBlogClass,name="List blog"),
+    path('blog/create/',views.CreateBlogClass,name="Create a blog"),
+    path('blog/<int:pk>',views.DetailBlogClass,name="Detail blog"),
+    
 ]

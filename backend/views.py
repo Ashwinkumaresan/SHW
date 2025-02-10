@@ -11,9 +11,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import IsAuthenticated
 
 from .serializers import MyTokenObtainPairSerializer
-from .models import UserProfileModel
-from .serializers import ProfileSerializer,PaitentRegister
-# Create your views here.
+from .models import UserProfileModel,MedicalRecordModel,BlogModel,DoctorProfileModel
+from .serializers import ProfileSerializer,PaitentRegister,MedicalRecordSerializer,BlogSerializer
 
 class Home(APIView):
     def get(self,request):
@@ -117,3 +116,107 @@ class paitentRegister(generics.CreateAPIView):
         return JsonResponse({'Register':"Success"},status=status.HTTP_200_OK)
 
 paitentRegisterClass=paitentRegister.as_view()
+
+class RecordDetail(generics.RetrieveAPIView):
+
+    queryset=MedicalRecordModel.objects.all()
+    serializer_class=MedicalRecordSerializer
+
+    def get(self, request,MedicalID=None, *args, **kwargs):
+        print("start")
+        if MedicalID is None:
+            return JsonResponse({"Record":"Provide medical ID"},status=status.HTTP_400_BAD_REQUEST)
+        
+        qs=UserProfileModel.objects.filter(MedicalID=MedicalID)
+        if not qs.exists():
+            return JsonResponse({"Record":"No content for the medical Id"},status=status.HTTP_204_NO_CONTENT)
+        
+        UserProfile=UserProfileModel.objects.get(MedicalID=MedicalID)
+        qs=MedicalRecordModel.objects.filter(UserProfile=UserProfile)
+
+        Record=qs.order_by('-Date').first()
+        serialize=MedicalRecordSerializer(Record).data
+        serialize['Record']="Success"
+        serialize['Patient_Name']=Record.UserProfile.User.username
+        serialize['Age']=Record.UserProfile.Age
+        serialize['Gender']=Record.UserProfile.Gender
+        print(serialize)
+        return JsonResponse(serialize,status=status.HTTP_200_OK)
+    
+RecordDetailClass=RecordDetail.as_view()
+
+class RecordHistroy(generics.ListAPIView):
+
+    queryset=MedicalRecordModel.objects.all()
+    serializer_class=MedicalRecordSerializer
+    permission_classes=[IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user=self.request.user
+        UserProfile=UserProfileModel.objects.get(User=user)
+        qs=MedicalRecordModel.objects.filter(UserProfile=UserProfile)
+        Record=qs.order_by("-Date")
+        #Record.order_by("-Date").first()
+        print(Record)
+        print(user)
+        if Record is not None:
+            serialize=MedicalRecordSerializer(Record,many=True)
+            return Response(serialize.data,status=status.HTTP_200_OK)
+        return Response({"Record":"No content"},status=status.HTTP_204_NO_CONTENT)
+    
+RecordHistroyClass=RecordHistroy.as_view()
+
+class ListBlog(generics.ListAPIView):
+    queryset=BlogModel.objects.all()
+    serializer_class=BlogSerializer
+
+    def get(self, request, *args, **kwargs):
+        qs=BlogModel.objects.all().order_by("-CreatedAt")[:5]
+        if not qs.exists():
+            return Response({"Blog":"No content"},status=status.HTTP_204_NO_CONTENT)
+        serialize=BlogSerializer(qs,many=True).data
+        #serialize['Blog']='success'
+        return Response(serialize,status=status.HTTP_200_OK)
+        # return super().get(request, *args, **kwargs)
+
+ListBlogClass=ListBlog.as_view()
+
+class CreateBlog(generics.CreateAPIView):
+    queryset=BlogModel.objects.all()
+    serializer_class=BlogSerializer
+
+    def perform_create(self, serializer):
+        user=self.request.user
+        author=DoctorProfileModel.objects.filter(User=user)
+        if not author.exists():
+            return Response({"Blog":"Only Doctor can write blog"},status=status.HTTP_401_UNAUTHORIZED)
+        Content=serializer.validated_data.get('Content')
+        if Content is None or Content=="":
+            return Response({"Blog":"No content"},status=status.HTTP_406_NOT_ACCEPTABLE)
+        author=DoctorProfileModel.objects.get(User=user)
+        serializer.save(Author=author)
+        return Response({"Blog":"Success"},status=status.HTTP_201_CREATED)
+        #return super().perform_create(serializer)
+
+CreateBlogClass=CreateBlog.as_view()
+
+class DetailBlog(generics.RetrieveAPIView):
+    queryset=BlogModel.objects.all()
+    serializer_class=BlogSerializer
+
+    def get(self, request,pk=None ,*args, **kwargs):
+
+        if pk is None:
+            return Response({'Blog':"Give pk"},status=status.HTTP_204_NO_CONTENT)
+        qs=BlogModel.objects.filter(pk=pk)
+        if not qs.exists():
+            return Response({'Blog':"No content"},status=status.HTTP_404_NOT_FOUND)
+        qs=BlogModel.objects.get(pk=pk)
+        serialize=BlogSerializer(qs).data
+        serialize['Blog']='success'
+        return Response(serialize,status=status.HTTP_200_OK)
+        #return super().get(request, *args, **kwargs)
+
+DetailBlogClass=DetailBlog.as_view()
+
+#hello
