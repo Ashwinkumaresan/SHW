@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from "react-router-dom";
 import "./Home.css"
 import axios from "axios"
 
 export const Home = () => {
+  const navigate = useNavigate(); // Ensure it's inside the component
+
   const [User, setUser] = useState("hi")
 
   const user = async () =>{
@@ -16,6 +19,14 @@ export const Home = () => {
   useEffect(()=>{
     user()
   },[])
+  const fetchData = async (e) => {
+    const token = localStorage.getItem("access_token")
+    if(!token){
+      navigate("/login");
+      return
+    }
+  }
+  
   return (
     <>
     {/* <!-- Start of hero session  --> */}
@@ -26,7 +37,7 @@ export const Home = () => {
             <p className=" text-center p-0 m-1">Find trusted professionals for your health needs</p>
             <div className="row justify-content-center">
                 <div className="col">
-                    <button  className="btn btn-primary rounded-pill px-5 py-2">Book now</button>
+                    <button  className="btn btn-primary rounded-pill px-5 py-2" onClick={fetchData}>Book now</button>
                 </div>
             </div>
         </div>

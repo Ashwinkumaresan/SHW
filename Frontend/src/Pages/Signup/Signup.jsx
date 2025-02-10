@@ -44,18 +44,7 @@ export const Signup = () => {
             });
             console.log(response.data);
             alert("Data sent successfully!");
-            const res = await fetch("http://127.0.0.1:8000/token/", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(formData),
-              });
-              if (!res.ok) throw new Error("Invalid username or password!!");
-        
-              const data = await res.json();
-              localStorage.setItem("access_token", data.access);
-              localStorage.setItem("refresh_token", data.refresh);
-
-              navigate(response.data.redirect);
+            navigate("/login");
         } catch (error) {
             console.error("Error sending data:", error);
             alert("Error: " + (error.response?.data?.error || "Unknown error"));
@@ -96,7 +85,7 @@ export const Signup = () => {
                                 type="password"
                                 name="verify_password"
                                 placeholder="Confirm password"
-                                value={formData.password}
+                                value={formData.verify_password}
                                 onChange={handleChange}
                                 style={{width:"100%"}}
                                 className='mb-4 p-2'

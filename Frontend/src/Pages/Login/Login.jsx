@@ -30,7 +30,7 @@ export const Login = () => {
             });
 
             console.log("Response Data:", response.data); // Check what is returned
-            alert("Data sent successfully!");
+            //alert("Data sent successfully!");
 
             if (response.status === 200) { // Check if request was successful
             console.log("Redirecting to:", response.data.redirect);
@@ -50,7 +50,8 @@ export const Login = () => {
               localStorage.setItem("access_token", data.access);
               localStorage.setItem("refresh_token", data.refresh);
 
-              navigate(response.data.redirect);
+              //navigate(response.data.redirect);
+              navigate("/");
         
         } catch (error) {
             console.error("Error sending data:", error);

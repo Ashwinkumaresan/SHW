@@ -11,6 +11,11 @@
     top: 0;
     left: 0;
 }
+.profile .back button{
+    background: none;
+    outline: none;
+    border: none;
+}
 .profile_pic{
     border-radius: 8px;
 }

@@ -6,6 +6,7 @@ import { Home } from './Pages/Home/Home'
 import { Login } from './Pages/Login/Login'
 import { Profile } from './Pages/Profile/Profile'
 import { Signup } from './Pages/Signup/Signup';
+import { MedicalRecord } from './Pages/MedicalRecord/MedicalRecord';
 
 function App() {
 
@@ -17,6 +18,7 @@ function App() {
         <Route path="/profile" element={<Profile/>}></Route>
         <Route path="/login" element={<Login/>}></Route>
         <Route path="/signup" element={ <Signup/> }></Route>
+        <Route path="/medicalRecord" element={ <MedicalRecord/> }></Route>
       </Routes>
     </BrowserRouter>
     {/* <Chatbot/> <Navbar /> <Home/> */}

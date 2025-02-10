@@ -77,7 +77,9 @@ export const Profile = () => {
     <>
     <div className="profile">
       <a href="/" className='back'>
-        <button className='btn fw-bold' >Back</button>
+        <button className=' fw-bold' >
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="#333" d="M10 22L0 12L10 2l1.775 1.775L3.55 12l8.225 8.225z"/></svg>
+        </button>
       </a>
       <div className="container p-md-0 p-3">  
         <div className="row mb-5">
