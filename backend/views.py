@@ -140,6 +140,10 @@ class RecordDetail(generics.RetrieveAPIView):
         serialize['Patient_Name']=Record.UserProfile.User.username
         serialize['Age']=Record.UserProfile.Age
         serialize['Gender']=Record.UserProfile.Gender
+        serialize['Country']=Record.UserProfile.Country
+        serialize['Address']=Record.UserProfile.Address
+        serialize['phoneNumber']=Record.UserProfile.PhoneNumber
+        serialize['QRcode']=Record.UserProfile.QRCode
         print(serialize)
         return JsonResponse(serialize,status=status.HTTP_200_OK)
     
