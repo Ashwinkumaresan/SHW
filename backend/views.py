@@ -133,7 +133,7 @@ class RecordDetail(generics.RetrieveAPIView):
         
         UserProfile=UserProfileModel.objects.get(MedicalID=MedicalID)
         qs=MedicalRecordModel.objects.filter(UserProfile=UserProfile)
-        UserSerialize=ProfileSerializer(qs)
+        UserSerialize=ProfileSerializer(UserProfile)
 
         Record=qs.order_by('-Date').first()
         serialize=MedicalRecordSerializer(Record).data
