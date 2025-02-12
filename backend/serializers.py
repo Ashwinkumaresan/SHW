@@ -27,6 +27,7 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields=[
            'MedicalID',
            'User',
+           
            'DateOfBirth',
            'Gender',
            'Age',
@@ -67,7 +68,8 @@ class MedicalRecordSerializer(serializers.ModelSerializer):
 
     #Doctor=serializers.CharField(read_only=True)
     Doctor=DoctorSerializer(read_only=True)
-    UserProfile=serializers.CharField()
+    UserProfile=ProfileSerializer(read_only=True)
+    MedicalID=serializers.CharField(write_only=True)
     # UserProfile=ProfileSerializer()
     HospitalName=serializers.CharField(read_only=True)
 
@@ -76,6 +78,7 @@ class MedicalRecordSerializer(serializers.ModelSerializer):
         fields=[
             'Doctor',
             'UserProfile',
+            'MedicalID',
             'Date',
             'HospitalName',
             'Symptoms',
@@ -86,14 +89,14 @@ class MedicalRecordSerializer(serializers.ModelSerializer):
             'AdditionalNotes'
         ]
 
-    def create(self, validated_data):
-        MedicalID=validated_data.pop("UserProfile")
-        qs=UserProfileModel.objects.filter("MedicalID")
-        if qs.exists():
-            qs=UserProfileModel.objects.get("MedicalID")
-            validated_data['UserProfile']=qs
-            return super().create(validated_data)
-        return JsonResponse({""})
+    # def create(self, validated_data):
+    #     MedicalID=validated_data.pop("UserProfile")
+    #     qs=UserProfileModel.objects.filter("MedicalID")
+    #     if qs.exists():
+    #         qs=UserProfileModel.objects.get("MedicalID")
+    #         validated_data['UserProfile']=qs
+    #         return super().create(validated_data)
+    #     return JsonResponse({""})
 
 class BlogSerializer(serializers.ModelSerializer):
 
