@@ -1,7 +1,20 @@
 from rest_framework import serializers
-from .models import UserProfileModel,MedicalRecordModel,BlogModel
+from .models import UserProfileModel,MedicalRecordModel,BlogModel,DoctorProfileModel
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.http import JsonResponse
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Add custom claims (extra user details)
+        token['username'] = user.username
+        #token['email'] = user.email
+
+        return token
 
 class ProfileSerializer(serializers.ModelSerializer):
 
@@ -34,34 +47,53 @@ class PaitentRegister(serializers.ModelSerializer):
             'password',
             'verify_password'
         ]
-        
-class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
 
-        # Add custom claims (extra user details)
-        token['username'] = user.username
-        #token['email'] = user.email
+class DoctorSerializer(serializers.ModelSerializer):
 
-        return token
+    class Meta:
+        model=DoctorProfileModel
+        fields=[
+            "User",
+            "LicenseNumber",
+            "Specialization",
+            'gender',
+            "profile",
+            "Degree",
+            "HospitalName",
+
+        ]
 
 class MedicalRecordSerializer(serializers.ModelSerializer):
+
+    #Doctor=serializers.CharField(read_only=True)
+    Doctor=DoctorSerializer(read_only=True)
+    UserProfile=serializers.CharField()
+    # UserProfile=ProfileSerializer()
+    HospitalName=serializers.CharField(read_only=True)
 
     class Meta:
         model=MedicalRecordModel
         fields=[
             'Doctor',
             'UserProfile',
-            'SensitiveInformation',
             'Date',
             'HospitalName',
             'Symptoms',
             'Diagnosis',
             'TestsConducted',
             'TreatmentPlan',
+            'SensitiveInformation',
             'AdditionalNotes'
         ]
+
+    def create(self, validated_data):
+        MedicalID=validated_data.pop("UserProfile")
+        qs=UserProfileModel.objects.filter("MedicalID")
+        if qs.exists():
+            qs=UserProfileModel.objects.get("MedicalID")
+            validated_data['UserProfile']=qs
+            return super().create(validated_data)
+        return JsonResponse({""})
 
 class BlogSerializer(serializers.ModelSerializer):
 

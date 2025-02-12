@@ -58,7 +58,7 @@ class UserProfileModel(models.Model):
         
         if self.MedicalID is None:
             self.MedicalID=generate_MedicalId()
-            URL=f" http://localhost:5173/record/{self.MedicalID}"
+            URL=f" http://localhost:5173/record/detail/{self.MedicalID}"
             qr = qrcode.QRCode(version=1, box_size=10, border=5)
             qr.add_data(URL)
             qr.make(fit=True)
@@ -105,5 +105,5 @@ class BlogModel(models.Model):
 
 
     def __str__(self):
-        return f"{self.Title}-{self.Author.User.username}"
+        return f"{self.pk}){self.Title}-{self.Author.User.username}"
        

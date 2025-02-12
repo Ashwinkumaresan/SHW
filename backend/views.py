@@ -66,6 +66,38 @@ class LoginView(views.APIView):
 
 LoginViewClass=LoginView.as_view()
 
+class DoctorLoginView(views.APIView):
+    permission_classes=[]
+
+    def post(self, request, *args, **kwargs):
+
+        data=json.loads(request.body)
+        username=data.get('username')
+        password=data.get('password')
+        licenseNumber=data.get('licenseNumber')
+
+
+        if not username or not password:
+            return JsonResponse({"Login": "Username and password are required."},status=status.HTTP_400_BAD_REQUEST)
+        
+        qs=DoctorProfileModel.objects.filter(LicenseNumber=licenseNumber)
+        if not qs.exists():
+            return JsonResponse({"Login": "Not the valid liscence number"},status=status.HTTP_400_BAD_REQUEST)
+
+        user = authenticate(username=username, password=password)
+        if user:
+            if user.is_active:
+                #token = Token.objects.get_or_create(user=user)
+                login(request,user)
+                # return JsonResponse({"token": token.key}, status=status.HTTP_200_OK)
+                return JsonResponse({"Login":"success","redirect":"/profile"},status=status.HTTP_200_OK)
+            else:
+                return JsonResponse({"Login": "User account is inactive."},status=status.HTTP_403_FORBIDDEN,)
+        else:
+            return JsonResponse({"Login": "Invalid username or password."},status=status.HTTP_401_UNAUTHORIZED,)
+
+DoctorLoginViewClass=DoctorLoginView.as_view()
+
 class LogoutView(views.APIView):
     
     def get(self, request, format=None):
@@ -91,6 +123,11 @@ class ProfileUpdate(generics.UpdateAPIView):
         return JsonResponse(serialize,status=status.HTTP_200_OK)
     
     def perform_update(self, serializer):
+        user=self.request.user
+
+        if user is None or user.is_anonymous:
+            return JsonResponse({"Login":"Login Required"},status=status.HTTP_403_FORBIDDEN)
+        
         return super().perform_update(serializer)
 
 ProfileUpdateClass=ProfileUpdate.as_view()
@@ -124,6 +161,7 @@ class RecordDetail(generics.RetrieveAPIView):
 
     def get(self, request,MedicalID=None, *args, **kwargs):
         print("start")
+        user=self.request.user
         if MedicalID is None:
             return JsonResponse({"Record":"Provide medical ID"},status=status.HTTP_400_BAD_REQUEST)
         
@@ -145,10 +183,42 @@ class RecordDetail(generics.RetrieveAPIView):
         serialize['Address']=Record.UserProfile.Address
         serialize['phoneNumber']=Record.UserProfile.PhoneNumber
         serialize['QRcode']=UserSerialize.data.get("QRCode")
+
+        if user is None or user.is_anonymous:
+            serialize['SensitiveInformation']="Login to get the Sensitive Information"
+
         print(serialize)
         return JsonResponse(serialize,status=status.HTTP_200_OK)
     
 RecordDetailClass=RecordDetail.as_view()
+
+class CreateRecord(generics.CreateAPIView):
+    queryset=MedicalRecordModel.objects.all()
+    serializer_class=MedicalRecordSerializer
+
+    #still incomplete
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user=self.request.user
+        Doctor=DoctorProfileModel.objects.filter(User=user)
+        if not Doctor.exists():
+            return Response({'Record':"False"},status.HTTP_403_FORBIDDEN)
+        Doctor=DoctorProfileModel.objects.get(User=user)
+        serializer['Doctor']=Doctor
+        MedicalID=serializer.validated_data.get('UserProfile')
+        userqs=UserProfileModel.objects.filter(MedicalID=MedicalID)
+        if not userqs.exists():
+            return Response({"Record":"Enter the valid MedicalID"},status=status.HTTP_400_BAD_REQUEST)
+        userqs=UserProfileModel.objects.get(MedicalID=MedicalID)
+        serializer['UserProfile']=userqs
+        serializer['HospitalName']=Doctor.HospitalName
+        serializer.save()
+        headers = self.get_success_headers(serializer.data)
+        return Response({"Record":"success"},status=status.HTTP_201_CREATED,headers=headers)
+        #return super().perform_create(serializer)
+    
+CreateRecordClass=CreateRecord.as_view()
 
 class RecordHistroy(generics.ListAPIView):
 
@@ -164,9 +234,10 @@ class RecordHistroy(generics.ListAPIView):
         #Record.order_by("-Date").first()
         print(Record)
         print(user)
-        if Record is not None:
-            serialize=MedicalRecordSerializer(Record,many=True)
-            return Response(serialize.data,status=status.HTTP_200_OK)
+        if Record is not None:     
+            serialize=MedicalRecordSerializer(Record,many=True).data
+            serialize.insert(0,{"Record":"Success"})
+            return Response(serialize,status=status.HTTP_200_OK)
         return Response({"Record":"No content"},status=status.HTTP_204_NO_CONTENT)
     
 RecordHistroyClass=RecordHistroy.as_view()
@@ -179,9 +250,9 @@ class ListBlog(generics.ListAPIView):
         qs=BlogModel.objects.all().order_by("-CreatedAt")[:5]
         if not qs.exists():
             return Response({"Blog":"No content"},status=status.HTTP_204_NO_CONTENT)
-        serialize=BlogSerializer(qs,many=True).data
+        serialize=BlogSerializer(qs,many=True)                                                               
         #serialize['Blog']='success'
-        return Response(serialize,status=status.HTTP_200_OK)
+        return Response(serialize.data,status=status.HTTP_200_OK)
         # return super().get(request, *args, **kwargs)
 
 ListBlogClass=ListBlog.as_view()
@@ -224,4 +295,16 @@ class DetailBlog(generics.RetrieveAPIView):
 
 DetailBlogClass=DetailBlog.as_view()
 
-#hello
+class DeleteBlog(generics.DestroyAPIView):
+    queryset=BlogModel.objects.all()
+    serializer_class=BlogSerializer
+
+    def delete(self, request,pk=None, *args, **kwargs):
+        instance=BlogModel.objects.filter(pk=pk)
+        #instance = self.get_object()
+        if not instance.exists():
+            return Response({'Delete':"Blog doesnt exisit"},status=status.HTTP_404_NOT_FOUND)
+        instance.delete()
+        return Response({'Delete':"Success"},status=status.HTTP_204_NO_CONTENT)
+
+DeleteBlogClass=DeleteBlog.as_view()
