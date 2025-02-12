@@ -8,7 +8,7 @@ export const DoctorLogin = () => {
         const [formData, setFormData] = useState({
             username: "",
             password: "",
-            doctorID: "",
+            licenseNumber: "",
         });
         const navigate = useNavigate(); // Ensure it's inside the component
 
@@ -26,7 +26,7 @@ export const DoctorLogin = () => {
             e.preventDefault();
 
         try {
-            const response = await axios.post("http://127.0.0.1:8000/login/", formData, {
+            const response = await axios.post("http://127.0.0.1:8000/login/doctor/", formData, {
             headers: { "Content-Type": "application/json" },
             });
 
@@ -45,6 +45,7 @@ export const DoctorLogin = () => {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(formData),
               });
+            //   console.log(data.access)
               if (!res.ok) throw new Error("Invalid username or password!!");
         
               const data = await res.json();
@@ -58,6 +59,43 @@ export const DoctorLogin = () => {
             console.error("Error sending data:", error);
             setInvalid(true)
         }
+
+            
+                
+            
+            // const handleSubmit = async (e) => {
+            //     e.preventDefault();
+              
+            //     try {
+            //       const response = await fetch("http://127.0.0.1:8000/api/login/", {
+            //         method: "POST",
+            //         headers: {
+            //           "Content-Type": "application/json",
+            //         },
+            //         body: JSON.stringify({ username, password }),
+            //       });
+              
+            //       const data = await response.json();
+            //       console.log("Response Data:", data);  // Debugging line
+            //       console.log("Response Data:", data);  // Debugging line
+            //       console.log("Response Data:", response.data.Login);  // Debugging line
+              
+            //       if (response.data.Login == "success") {
+            //         console.log("Redirecting to:", data.redirect);  // Debugging line
+            //         navigate("/profile");
+            //       } else {
+            //         setError(data.error);
+            //         console.error("Error:", data.error);  // Debugging line
+            //       }
+            //     } catch (error) {
+            //       console.error("Fetch error:", error);
+            //       setError("Something went wrong.");
+            //     }
+            //     finally{
+            //         console.log("finished")
+            //     }
+            // }
+
         };
         
     
@@ -87,9 +125,9 @@ export const DoctorLogin = () => {
                                 />
                                 <input
                                     type="text"
-                                    name="doctorID"
-                                    placeholder="Enter doctorID"
-                                    value={formData.doctorID}
+                                    name="licenseNumber"
+                                    placeholder="Enter licenseNumber"
+                                    value={formData.licenseNumber}
                                     onChange={handleChange}
                                     style={{width:"100%"}}
                                     className='mb-4 p-2'

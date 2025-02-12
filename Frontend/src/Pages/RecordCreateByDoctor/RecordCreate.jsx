@@ -24,7 +24,10 @@ export const RecordCreate = () => {
 
         try {
             const response = await axios.post("http://127.0.0.1:8000/record/create", formData, {
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "application/json",
+                    "Authorization": "Bearer " + localStorage.getItem("access_token") ,
+                 },
+                
             });
 
             alert("Data submitted successfully!");
@@ -33,6 +36,15 @@ export const RecordCreate = () => {
             console.error("Error submitting data:", error);
             alert("Error submitting data");
         }
+        const res = await fetch("http://127.0.0.1:8000/record/create", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(formData),
+          });
+          if (!res.ok) throw new Error("Error is backend response");
+          const data = await res.json();
+              localStorage.setItem("access_token", data.access);
+            localStorage.setItem("refresh_token", data.refresh);
     };
 
     return (

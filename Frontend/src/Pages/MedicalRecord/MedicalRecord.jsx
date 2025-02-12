@@ -119,8 +119,8 @@ export const MedicalRecord = ( {word} ) => {
           setTreatementPlan(data.TreatmentPlan)
           setADitionalNotes(data.AdditionalNotes)
           setPhone(data.phoneNo)
-          setHospitalName(data.HospitalName)
-          setDoctorName(data.Doctor)
+          setHospitalName(data.Doctor.HospitalName)
+          setDoctorName(data.Doctor.LicenseNumber)
           setQrCode(profil_pic)
         }catch(error){
             console.log(error)
