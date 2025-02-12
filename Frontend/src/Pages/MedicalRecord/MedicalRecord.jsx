@@ -24,23 +24,72 @@ export const MedicalRecord = ( {word} ) => {
     const [aditionalNotes, setADitionalNotes] = useState("aditional plan")
     const [hospitalName, setHospitalName] = useState("")
     const [doctorName, setDoctorName] = useState("")
+    const [qrCode, setQrCode] = useState("")
     const contentRef = useRef(null);
 
     const handleDownload = () => {
       const content = contentRef.current;
-      
-      html2canvas(content, { scale: 2 }).then((canvas) => {
-        const imgData = canvas.toDataURL("image/png"); // Convert content to an image
-        const pdf = new jsPDF("p", "mm", "a4"); // A4 size PDF
-  
-        // Adjust image size to fit A4
-        const pdfWidth = 210;
-        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-  
-        pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-        pdf.save(`${word}.pdf`); // Download the file
+    
+      // Force mobile styles before capturing
+      content.style.width = window.innerWidth + "px"; 
+      content.style.maxWidth = "100%"; 
+    
+      const isMobile = window.innerWidth <= 768; // Detect mobile screen
+      const scaleFactor = isMobile ? 3 : 2; 
+    
+      // Wait for all images to load before capturing the content
+      const images = content.querySelectorAll("img");
+      const imagePromises = Array.from(images).map((img) => {
+        return new Promise((resolve) => {
+          if (img.complete) {
+            resolve();
+          } else {
+            img.onload = resolve;
+            img.onerror = resolve;
+          }
+        });
+      });
+    
+      Promise.all(imagePromises).then(() => {
+        html2canvas(content, { 
+          scale: scaleFactor, 
+          useCORS: true,
+          allowTaint: true,
+          windowWidth: window.innerWidth, // Ensures proper responsive layout capture
+          width: content.scrollWidth, // Captures full width in mobile
+        }).then((canvas) => {
+          const imgData = canvas.toDataURL("image/png"); 
+          const pdf = new jsPDF("p", "mm", "a4"); // A4 size
+    
+          const pdfWidth = 210; // A4 width in mm
+          const pdfHeight = 297; // A4 height in mm
+          const imgWidth = pdfWidth;
+          const imgHeight = (canvas.height * pdfWidth) / canvas.width; // Scale image to fit width
+          let heightLeft = imgHeight;
+          let position = 0;
+    
+          // Add first page
+          pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+          heightLeft -= pdfHeight;
+    
+          // If content is larger than one page, add new pages
+          while (heightLeft > 0) {
+            position -= pdfHeight; // Move content up for next page
+            pdf.addPage();
+            pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+            heightLeft -= pdfHeight;
+          }
+    
+          // Restore original styles after capture
+          content.style.width = "";
+          content.style.maxWidth = "";
+    
+          pdf.save(`${word}.pdf`);
+        });
       });
     };
+    
+    
     const fetchData = async (e) => {
         const token = localStorage.getItem("access_token")
         // if(!token){
@@ -56,6 +105,7 @@ export const MedicalRecord = ( {word} ) => {
               },
           })
           const data = await response.json()
+          const profil_pic = `http://127.0.0.1:8000/${data.QRcode}`
           console.log(data)
           setName(data.Patient_Name)
           setAge(data.Age)
@@ -71,6 +121,7 @@ export const MedicalRecord = ( {word} ) => {
           setPhone(data.phoneNo)
           setHospitalName(data.HospitalName)
           setDoctorName(data.Doctor)
+          setQrCode(profil_pic)
         }catch(error){
             console.log(error)
         }
@@ -81,17 +132,24 @@ export const MedicalRecord = ( {word} ) => {
 
   
     return (
-      <div>
+      <div className='medical_record'>
         <div ref={contentRef} className='pt-4 ps-4'>
         <h1 class="">Medical Record</h1>
         <hr />
-        <p class=" fs-3 m-0 mt-5"><span class = " fw-bold ">Name:</span> {name} </p>
-        <p class=" fs-3 m-0"><span class = " fw-bold ">DOB:</span> {dob} </p>
-        <p class=" fs-3 m-0"><span class = " fw-bold ">Gender:</span> {gender} </p>
-        <p class=" fs-3 m-0"><span class = " fw-bold ">Age:</span> {age} </p>
-        <p class=" fs-3 m-0"><span class = " fw-bold ">Phone no:</span> {phone} </p>
-        <p class=" fs-3 m-0"><span class = " fw-bold ">Address:</span> {address} </p>
-        <p class=" fs-3 m-0 mb-5"><span class = " fw-bold ">Country:</span> {country} </p>
+        <div className="row">
+          <div className="col-8">
+            <p class=" fs-3 m-0 mt-5"><span class = " fw-bold ">Name:</span> {name} </p>
+            <p class=" fs-3 m-0"><span class = " fw-bold ">DOB:</span> {dob} </p>
+            <p class=" fs-3 m-0"><span class = " fw-bold ">Gender:</span> {gender} </p>
+            <p class=" fs-3 m-0"><span class = " fw-bold ">Age:</span> {age} </p>
+            <p class=" fs-3 m-0"><span class = " fw-bold ">Phone no:</span> {phone} </p>
+            <p class=" fs-3 m-0"><span class = " fw-bold ">Address:</span> {address} </p>
+            <p class=" fs-3 m-0 mb-5"><span class = " fw-bold ">Country:</span> {country} </p>
+          </div>
+          <div className="col">
+            <img src={qrCode} alt="" />
+          </div>
+        </div>
         <hr className='mb-5'/>
         <p class=" fs-3 m-0"><span class = " fw-bold ">Doctor LN:</span> { doctorName } </p>
         <p class=" fs-3 m-0"><span class = " fw-bold ">Hospital name:</span> { hospitalName } </p>
@@ -111,9 +169,11 @@ export const MedicalRecord = ( {word} ) => {
             <button onClick={handleDownload} className='btn btn-primary me-2' style={{ marginTop: "10px", display: "block" }}>
             Download as PDF
             </button>
-            <button  className='btn btn-dark' style={{ marginTop: "10px", display: "block" }}>
-            Back
-            </button>
+            <a href='/' style={{textDecoration:"none"}}>
+              <button  className='btn btn-dark' style={{ marginTop: "10px", display: "block" }}>
+              Back
+              </button>
+            </a>
         </div>
       </div>
     );

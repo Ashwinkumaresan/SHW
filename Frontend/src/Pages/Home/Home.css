@@ -32,7 +32,8 @@
 .for_family{
     width: 100%;
     height: 250px;
-    background-image: url("for_family.svg");
+    /* background-image: url("for_family.svg"); */
+    background-color: #59C3FF;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -41,7 +42,8 @@
 .for_individual{
     width: 100%;
     height: 250px;
-    background-image: url("for_individual.svg");
+    /* background-image: url("for_individual.svg"); */
+    background-color: #EBB4FF;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -50,7 +52,8 @@
 .for_advisor{
     width: 100%;
     height: 250px;
-    background-image: url("for_advisor.svg");
+    /* background-image: url("for_advisor.svg"); */
+    background-color: #71F68F;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -59,7 +62,8 @@
 .for_gaurdian{
     width: 100%;
     height: 250px;
-    background-image: url("for_gaurdian.svg");
+    /* background-image: url("for_gaurdian.svg"); */
+    background-color: #FF5894;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;

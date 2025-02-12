@@ -1,3 +1,7 @@
+.medical_record{
+    width: 100%;
+    overflow-x: hidden;
+}
 #content {
     padding: 20px;
     border-radius: 8px;

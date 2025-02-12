@@ -60,7 +60,7 @@ export const Home = () => {
     </div>
     {/* <!-- End of hero session --> */}
 
-    <div className="Reimbursement pt-5" id='res'>
+    <div className="Reimbursement pt-5 mb-5" id='res'>
       <div className="d-flex flex-column text-center">
         <p className="mt-4 display-4 text-center p-0 m-1 fw-semibold">Choose your doctor</p>
         <p className="text-center playwritter fs-2 p-0 m-1 fw-bolder ">Reimbursement</p>
