@@ -222,19 +222,19 @@ class CreateRecord(generics.CreateAPIView):
         user=self.request.user
         Doctor=DoctorProfileModel.objects.filter(User=user)
         if not Doctor.exists():
-            return Response({'Record':"False"},status.HTTP_403_FORBIDDEN)
+            return JsonResponse({'Record':"False"},status.HTTP_403_FORBIDDEN)
         Doctor=DoctorProfileModel.objects.get(User=user)
         #serializer['Doctor']=Doctor
         MedicalID=serializer.validated_data.pop('MedicalID')
         userqs=UserProfileModel.objects.filter(MedicalID=MedicalID)
         if not userqs.exists():
-            return Response({"Record":"Enter the valid MedicalID"},status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse({"Record":"Enter the valid MedicalID"},status=status.HTTP_400_BAD_REQUEST)
         userqs=UserProfileModel.objects.get(MedicalID=MedicalID)
         # serializer['UserProfile']=userqs
         # serializer['HospitalName']=Doctor.HospitalName
         serializer.save(Doctor=Doctor,UserProfile=userqs,HospitalName=Doctor.HospitalName)
         headers = self.get_success_headers(serializer.data)
-        return Response({"Record":"success"},status=status.HTTP_201_CREATED,headers=headers)
+        return JsonResponse({"Record":"success"},status=status.HTTP_201_CREATED,headers=headers)
         #return super().perform_create(serializer)
     
 CreateRecordClass=CreateRecord.as_view()
