@@ -27,7 +27,9 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields=[
            'MedicalID',
            'User',
-           
+           'Guadian1',
+           'Guadian2',
+           "Guadian3",
            'DateOfBirth',
            'Gender',
            'Age',

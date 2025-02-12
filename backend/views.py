@@ -134,20 +134,34 @@ class ProfileUpdate(generics.UpdateAPIView):
         user=self.request.user
 
         if user is None or user.is_anonymous:
-            return JsonResponse({"Login":"Login Required"},status=status.HTTP_403_FORBIDDEN)
+            return Response({"Login":"Login Required"},status=status.HTTP_403_FORBIDDEN)
         
         data=UserProfileModel.objects.get(User=user)
         serialize=ProfileSerializer(data).data
         serialize['Login']="success"
-        return JsonResponse(serialize,status=status.HTTP_200_OK)
+        return Response(serialize,status=status.HTTP_200_OK)
     
     def perform_update(self, serializer):
-        user=self.request.user
 
+        user=self.request.user
         if user is None or user.is_anonymous:
-            return JsonResponse({"Login":"Login Required"},status=status.HTTP_403_FORBIDDEN)
+            return Response({"Login":"Login Required"},status=status.HTTP_403_FORBIDDEN)
         
-        return super().perform_update(serializer)
+        gurdian1=serializer.validated_data.get('Guadian1')
+        gurdian2=serializer.validated_data.get('Guadian2')
+        gurdian3=serializer.validated_data.get('Guadian3')
+
+        qs1=UserProfileModel.objects.filter(MedicalID=gurdian1)
+        qs2=UserProfileModel.objects.filter(MedicalID=gurdian2)
+        qs3=UserProfileModel.objects.filter(MedicalID=gurdian3)
+
+        if  not qs1.exists() and  not qs2.exists() and not qs3.exists():
+            # if  gurdian1 is not None and not gurdian2 is None and  not gurdian3 is None:
+            return Response({"Login":"Gardian ID is not correct"},status=status.HTTP_403_FORBIDDEN)
+
+        # return super().perform_update(serializer)
+        serializer.save()
+        return Response({"Login":"Success"},status=status.HTTP_200_OK)
 
 ProfileUpdateClass=ProfileUpdate.as_view()
 
