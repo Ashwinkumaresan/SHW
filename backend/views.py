@@ -125,6 +125,7 @@ class DoctorProfile(generics.RetrieveAPIView):
         data=DoctorProfileModel.objects.get(User=user)
         serilaize=DoctorSerializer(data).data
         #serilaize['Login']="success"
+        serilaize['userName']=user.username
         return JsonResponse(serilaize,status=200)
     
 DoctorProfileClass=DoctorProfile.as_view()

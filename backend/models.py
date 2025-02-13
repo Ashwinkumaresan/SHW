@@ -30,6 +30,8 @@ class DoctorProfileModel(models.Model):
     profile=models.ImageField(null=True,blank=True,upload_to="ProfilePic")
     Degree=models.CharField(max_length=20,null=True)
     HospitalName=models.CharField(max_length=100,null=True)
+    ProfilePic=models.ImageField(null=True,blank=True,upload_to="Doctorpic")
+    Location=models.CharField(max_length=100,null=True)
 
     def __str__(self):
         return f"{self.User.username}-{self.LicenseNumber}"
