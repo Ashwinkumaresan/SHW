@@ -293,7 +293,7 @@ class ListBlog(generics.ListAPIView):
     serializer_class=BlogSerializer
 
     def get(self, request, *args, **kwargs):
-        qs=BlogModel.objects.all().order_by("-CreatedAt")[:5]
+        qs=BlogModel.objects.all().order_by("-CreatedAt")
         if not qs.exists():
             return Response({"Blog":"No content"},status=status.HTTP_204_NO_CONTENT)
         serialize=BlogSerializer(qs,many=True)                                                               
