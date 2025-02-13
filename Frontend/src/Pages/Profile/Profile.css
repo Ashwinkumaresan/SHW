@@ -32,3 +32,13 @@
 .profile a{
     text-decoration: none;
 }
+.createmeeting{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    padding: 50px;
+    border-radius: 8px;
+    width: 350px;
+}

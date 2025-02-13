@@ -82,8 +82,36 @@ export const DoctorProfile = () => {
     navigate("/")
   }
 
+    const[openPopup, setOpenPopup]=useState(false)
+  
+    // To stop scrolling while popup open index-168
+    if(openPopup)
+    {
+      document.body.classList.add('active_modal');
+    }
+    else
+    {
+      document.body.classList.remove('active_modal');
+    }
+    function Scroll() {
+      window.scrollTo(0, 0);
+    }
+
   return (
     <>
+
+{
+      openPopup &&
+    <div className="popup_login">
+      <button className="X" onClick={()=> setOpenPopup(false)}><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z"/></svg></button>
+      <div className="container createmeeting">
+        <input type="text" className='mb-2 rounded p-2' style={{width:"100%"}} placeholder='Enter the patient id'/>
+        <input type="text" className='mb-2 rounded p-2' style={{width:"100%"}} placeholder='Enter the meeting link'/>
+        <button className='btn btn-primary' style={{width:"100%"}}>Send</button>
+      </div>
+    </div>
+    }
+
     <div className="profile">
       <a href="/" className='back'>
         <button className=' fw-bold' >
@@ -156,6 +184,7 @@ export const DoctorProfile = () => {
             <div className="row">
               <div className="col-12 py-2 rounded text-center ">
                 <p className='h5 fs-4 m-0'><span className='fw-bolder'>Doctor ID:</span> {medicalId} </p>
+                <button className='btn btn-primary mt-2' onClick={() => {[setOpenPopup(true), scroll]}}>Create Meeting</button>
               </div>
             </div>
             <div className="row">
