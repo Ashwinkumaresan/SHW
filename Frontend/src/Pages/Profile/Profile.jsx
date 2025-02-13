@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import "./Profile.css"
+import axios from 'axios';
 
 export const Profile = () => {
   const navigate = useNavigate(); // Ensure it's inside the component
@@ -80,6 +81,25 @@ export const Profile = () => {
     navigate("/")
   }
 
+    const handleDelete = async (e) => {
+      e.preventDefault();
+  
+      try {
+          await axios.delete("http://127.0.0.1:8000/meet/remove", {
+              headers: {
+                  "Authorization": `Bearer ${localStorage.getItem("access_token")}`,  // Replace with actual token
+              }
+          });
+  
+          console.log("Delete request sent successfully");
+      } catch (error) {
+          console.error("Error deleting data:", error.response ? error.response.data : error);
+
+      }
+  };
+  
+
+
   return (
     <>
     <div className="profile">
@@ -145,7 +165,7 @@ export const Profile = () => {
                     <a href={link} style={{width:"100%"}}>
                       <button className='btn btn-primary' style={{width:"100%"}}>Start Meeting</button>
                     </a>
-                      <button className='btn btn-outline-danger mt-2' style={{width:"100%"}}>Stop Meeting</button>
+                      <button className='btn btn-outline-danger mt-2' onClick={handleDelete} style={{width:"100%"}}>Stop Meeting</button>
                   </div>
                 </div>
               </div>
