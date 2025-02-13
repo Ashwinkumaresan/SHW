@@ -26,8 +26,8 @@ class Home(APIView):
         if patient.exists():
             return JsonResponse({"User":"Patient"},status=status.HTTP_200_OK) 
         
-        if user is None or user.is_anonymous:
-                return JsonResponse({"User":"Login"},status=status.HTTP_200_OK)
+        # if user is None or user.is_anonymous:
+        #         return JsonResponse({"User":"Login"},status=status.HTTP_200_OK)
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer 
@@ -110,8 +110,8 @@ class DoctorLoginView(views.APIView):
 DoctorLoginViewClass=DoctorLoginView.as_view()
 
 class DoctorProfile(generics.RetrieveAPIView):
-    queryset=UserProfileModel.objects.all()
-    serializer_class=ProfileSerializer
+    queryset=DoctorProfileModel.objects.all()
+    serializer_class=DoctorSerializer
 
     def get(self, request, *args, **kwargs):
         auth = self.request.headers.get("Authorization")
@@ -121,9 +121,10 @@ class DoctorProfile(generics.RetrieveAPIView):
         print("check")
         print(self.request.user)
         user=self.request.user
+
         data=DoctorProfileModel.objects.get(User=user)
         serilaize=DoctorSerializer(data).data
-        serilaize['Login']="success"
+        #serilaize['Login']="success"
         return JsonResponse(serilaize,status=200)
     
 DoctorProfileClass=DoctorProfile.as_view()
