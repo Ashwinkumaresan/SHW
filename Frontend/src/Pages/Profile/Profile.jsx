@@ -141,9 +141,11 @@ export const Profile = () => {
                         <p className='p-0 m-0 fw-bolder'>Meeting's</p>
                     </div>
                     <hr />
-                    {/* <img src="fastband.png" alt="Fastband" className='img-fluid ' /> */}
-                    <a href={link}>hi</a>
-                    <p>{link}</p>
+                    <img src="meeting.png" alt="Fastband" className='img-fluid mb-2'  />
+                    <a href={link} style={{width:"100%"}}>
+                      <button className='btn btn-primary' style={{width:"100%"}}>Start Meeting</button>
+                    </a>
+                      <button className='btn btn-outline-danger mt-2' style={{width:"100%"}}>Stop Meeting</button>
                   </div>
                 </div>
               </div>
