@@ -355,3 +355,44 @@ class DeleteBlog(generics.DestroyAPIView):
 
 DeleteBlogClass=DeleteBlog.as_view()
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import requests
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
+
+@csrf_exempt
+def send_sms(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            response = requests.post(
+                "https://www.fast2sms.com/dev/bulkV2",
+                headers={
+                    "authorization": "YOUR_FAST2SMS_AUTH_KEY",
+                    "Content-Type": "application/json",
+                },
+                json=data,
+            )
+            return JsonResponse(response.json(), status=response.status_code)
+        except Exception as e:
+            return JsonResponse({"error": str(e)}, status=500)
+    return JsonResponse({"error": "Invalid request method"}, status=400)

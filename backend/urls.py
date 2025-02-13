@@ -22,4 +22,7 @@ urlpatterns=[
     path('blog/delete/<int:pk>',views.DeleteBlogClass,name="Delete blog"),
 
     
+
+
+    path("send-sms/", views.send_sms, name="send_sms"),
 ]
