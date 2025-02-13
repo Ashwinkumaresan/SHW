@@ -11,67 +11,68 @@ export const DoctorProfile = () => {
   const [age, setAge] = useState("medical id")
   const [hospitalName, setHospitalName] = useState("medical id")
   const [phoneno, setPhoneNo] = useState("medical id")
-  const [qrcode, setQrcode] = useState("")
   const [profilePic, setProfilePic] = useState("")
-  const [location, setLocation] = useState("")
+  const [location, setLocation] = useState("Location")
 
-//   const fetchData = async (e) => {
-//     const token = localStorage.getItem("access_token")
-//     if(!token){
-//       navigate("/login");
-//       return
-//     }
-//     try{
-//       const response = await fetch('http://127.0.0.1:8000/profile/',{
-//         method: 'GET',
-//         headers: {
-//           'Content-Type': 'application/json',
-//           'Authorization': `Bearer ${token}`,
-//           },
-//       })
-//       const data = await response.json()
-//       const qr = `http://127.0.0.1:8000/${data.QRCode}`
-//       const profil_pic = `http://127.0.0.1:8000/${data.ProfilePic}`
-//       console.log(data)
-//       console.log(data.User)
-//       console.log(data.Gender)
-//       setMedicalId(data.QRCode)
-//       setMedicalId(data.MedicalID)
-//       setUsername(data.User)
-//       setGender(data.Gender)
-//       setAge(data.Age)
-//       setDob(data.DateOfBirth)
-//       setPhoneNo(data.PhoneNumber)
-//       setQrcode(qr)
-//       setLocation(data.Country)
-//       setProfilePic(profil_pic)
-//     }
-//     catch(error){
-//       console.log(error)
-//       }
-//   }
-
-//   useEffect(()=>{
-//     fetchData()
-//   },[])
-  
-  const downloadQR = async () => {
-    try {
-      const response = await fetch(qrcode);
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-  
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `${medicalId}_qr.png`; 
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url); 
-    } catch (error) {
-      console.error("Failed to download QR code:", error);
+  const fetchData = async (e) => {
+    const token = localStorage.getItem("access_token")
+    if(!token){
+      navigate("/doctorlogin");
+      return
     }
-  };
+    try{
+      const response = await fetch('http://127.0.0.1:8000/profile/doctor/',{
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+          },
+      })
+      const data = await response.json()
+      console.log(data)
+      // console.log(data.User)
+      // console.log(data.Gender)
+      // setMedicalId(data.MedicalID)
+      // setUsername(data.User)
+      // setGender(data.Gender)
+      // setAge(data.Age)
+      // setDob(data.DateOfBirth)
+      // setPhoneNo(data.PhoneNumber)
+      // setQrcode(qr)
+      // setLocation(data.Country)
+      // setProfilePic(profil_pic)
+    }
+    catch(error){
+      console.log(error)
+      }
+  }
+
+  useEffect(()=>{
+    fetchData()
+  },[])
+  
+  //   try {
+  //     const response = await fetch(qrcode);
+  //     const blob = await response.blob();
+  //     const url = URL.createObjectURL(blob);
+  
+  //     const link = document.createElement('a');
+  //     link.href = url;
+  //     link.download = `${medicalId}_qr.png`; 
+  //     document.body.appendChild(link);
+  //     link.click();
+  //     document.body.removeChild(link);
+  //     URL.revokeObjectURL(url); 
+  //   } catch (error) {
+  //     console.error("Failed to download QR code:", error);
+  //   }
+  // };
+
+  const logout = () =>{
+    localStorage.removeItem('access_token')
+    localStorage.removeItem('refresh_token')
+    navigate("/")
+  }
 
   return (
     <>
@@ -95,10 +96,11 @@ export const DoctorProfile = () => {
                     </div>
                   </div>
                   <div className="col-12 col-md-6 p-4 d-flex  justify-content-center flex-column ">
-                    <p className='p-2 m-0'><span className='fw-bolder'>Username:</span> {username}</p>
-                    <p className='p-2 m-0'><span className='fw-bolder'>Gender:</span> {gender}</p>
-                    <p className='p-2 m-0'><span className='fw-bolder'>Hospital name:</span>{hospitalName}</p>
-                    <p className='p-2 m-0'><span className='fw-bolder'>Location:</span> {location}</p>
+                    <p className='p-2 m-0 fs-5'><span className='fw-bolder'>Username:</span> {username}</p>
+                    <p className='p-2 m-0 fs-5'><span className='fw-bolder'>Doctor ln:</span> {medicalId}</p>
+                    <p className='p-2 m-0 fs-5'><span className='fw-bolder'>Gender:</span> {gender}</p>
+                    <p className='p-2 m-0 fs-5'><span className='fw-bolder'>Hospital name:</span>{hospitalName}</p>
+                    <p className='p-2 m-0 fs-5'><span className='fw-bolder'>Location:</span> {location}</p>
                   </div>
                 </div>
               </div>
@@ -141,21 +143,27 @@ export const DoctorProfile = () => {
               </div>
             </div>
           </div>
-          <div className="col-12 col-md-4 col-lg-4 col-xl-4 col-xxl-4 offset-md-1 mt-5 card_profiles pt-4">
+          <div className="col-12 col-md-4 col-lg-4 col-xl-4 col-xxl-4 offset-md-1 mt-5 card_profiles pt-4 d-flex flex-column justify-content-center">
             <div className="row">
               <div className="col-12 py-2 rounded text-center ">
                 <p className='h5 fs-4 m-0'><span className='fw-bolder'>Doctor ID:</span> {medicalId} </p>
               </div>
             </div>
             <div className="row">
-              <div className="col-12 rounded p-2 text-center ">
-                <img src={qrcode} alt="Qrcode" className='img-fluid' width={350} />
+              <div className="col-12 rounded p-2 text-center">
+                <div className='p-3 my-2' style={{height:"50vh", border:"2px dashed grey", borderRadius:"4px"}}>
+                <img src='blog.png' alt="Qrcode" className='img-fluid' width={350} />
+                <a href="/blogwrite">
+                  <button className='btn btn-outline-primary mb-4' style={{width:"100%"}}>+Blog</button>
+                </a>
+                </div>
               </div>
             </div>
             <div className="row">
-              <div className="col-12 rounded">
-                <button type='button' onClick={downloadQR} className='btn btn-outline-primary mb-4' style={{width:"100%"}}>Download</button>
+              <div className="col-12 rounded text-center">
+                {/* <button type='button' className='btn btn-outline-primary mb-4' style={{width:"100%"}}>Download</button> */}
                 <button className='btn btn-primary mb-4' style={{width:"100%"}}>Edit profile</button>
+                <a href="#" onClick={logout}>Log out</a>
               </div>
             </div>
           </div>

@@ -12,6 +12,8 @@ import { MedicalRecord } from './Pages/MedicalRecord/MedicalRecord';
 import { RecordCreate } from './Pages/RecordCreateByDoctor/RecordCreate';
 import { Blog } from './Pages/Blog/Blog';
 import { DoctorLogin } from './Pages/Login/DoctorLogin';
+import { BlogWrite } from './Pages/BlogWrite/BlogWrite';
+import { Yoga } from './Pages/Yoga/Yoga';
 
 function App() {
   const WordPage = () => {
@@ -32,6 +34,8 @@ function App() {
         <Route path="/record/detail/:text" element={ < WordPage/> }></Route>
         <Route path="/recordcreate" element={ <RecordCreate/> }></Route>
         <Route path="/blog" element={ <Blog/> }></Route>
+        <Route path="/blogwrite" element={ <BlogWrite/> }></Route>
+        <Route path="/mentalhealth" element={ <Yoga/> }></Route>
 
         <Route path="/notification" element={ <Notification/> }></Route>
       </Routes>

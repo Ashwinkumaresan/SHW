@@ -72,6 +72,11 @@ export const Profile = () => {
       console.error("Failed to download QR code:", error);
     }
   };
+  const logout = () =>{
+    localStorage.removeItem('access_token')
+    localStorage.removeItem('refresh_token')
+    navigate("/")
+  }
 
   return (
     <>
@@ -95,11 +100,11 @@ export const Profile = () => {
                     </div>
                   </div>
                   <div className="col-12 col-md-6 p-4 d-flex  justify-content-center flex-column ">
-                    <p className='p-2 m-0'><span className='fw-bolder'>Username:</span> {username}</p>
-                    <p className='p-2 m-0'><span className='fw-bolder'>Gender:</span> {gender}</p>
-                    <p className='p-2 m-0'><span className='fw-bolder'>Age:</span> {age}</p>
-                    <p className='p-2 m-0'><span className='fw-bolder'>Date of Birth:</span>{dob}</p>
-                    <p className='p-2 m-0'><span className='fw-bolder'>Location:</span> {location}</p>
+                    <p className='p-2 m-0 fs-5'><span className='fw-bolder'>Username:</span> {username}</p>
+                    <p className='p-2 m-0 fs-5'><span className='fw-bolder'>Gender:</span> {gender}</p>
+                    <p className='p-2 m-0 fs-5'><span className='fw-bolder'>Age:</span> {age}</p>
+                    <p className='p-2 m-0 fs-5'><span className='fw-bolder'>Date of Birth:</span>{dob}</p>
+                    <p className='p-2 m-0 fs-5'><span className='fw-bolder'>Location:</span> {location}</p>
                   </div>
                 </div>
               </div>
@@ -129,7 +134,7 @@ export const Profile = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-12 col-md-5 rounded offset-md-1 mt-5 mt-md-0 text-center card_profiles">
+                  <div className="col-12 col-md-5 rounded offset-md-1 mt-5 mt-md-0 text-center card_profiles d-flex flex-column justify-content-center">
                     <div className='d-flex justify-content-between mt-2'>
                         <p className='p-0 m-0 fw-bolder'>Fastband</p>
                         <a href="#">Edit config</a>
@@ -154,7 +159,7 @@ export const Profile = () => {
               </div>
             </div>
             <div className="row">
-              <div className="col-12 rounded">
+              <div className="col-12 rounded text-center">
                 {/* <p className='p-0 m-0 fw-bolder'>Presonal details</p>
                 <hr />
                 <p className='p-2 m-0 mb-4'><span className='fw-bolder'>Phone number:</span> {phoneno} </p> */}
@@ -163,6 +168,7 @@ export const Profile = () => {
                 </a> */}
                 <button type='button' onClick={downloadQR} className='btn btn-outline-primary mb-4' style={{width:"100%"}}>Download</button>
                 <button className='btn btn-primary mb-4' style={{width:"100%"}}>Edit profile</button>
+                <a href="#" onClick={logout}>Log out</a>
               </div>
             </div>
           </div>

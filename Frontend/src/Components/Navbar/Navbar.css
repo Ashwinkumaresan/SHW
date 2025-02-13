@@ -12,3 +12,131 @@
     position: absolute;
     left: 40%;
 }
+.active_modal{
+    overflow-y: hidden;  
+  }
+/* popup_login */
+.popup_login{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(9px);
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+  }
+  .X{
+    position: absolute;
+    top: 2%;
+    left: 2%;
+    background: transparent;
+    outline: none;
+    border: none;
+  }
+    .popup_login_container{
+    background-color:white;
+    border-radius: 20px;
+  }
+  .home_kitchen{
+    background-color:#a7c1f9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem;
+    border-radius: 20px 0px 0px 20px;
+  }
+  
+  .home_kitchen h1{
+    font-weight: lighter;
+    font-size: 3rem;
+    letter-spacing: 3px;
+  }
+  .home_kitchen h1 span{
+    color: white;
+  }
+  .popup_para{
+    font-size: 20px;
+    margin: 28px 0;
+    font-weight: lighter;
+  }
+  .home_kitchen button{
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 35px;
+    font-size: 18px;
+    color: white;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  .home_kitchen button a{
+    text-decoration: none;
+    color: white;
+  }
+  .sign_up_para{
+    text-decoration: none;
+  }
+  .home_customer{
+    color: #333333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 6rem;
+  }
+  .home_customer h1{
+    font-weight: lighter;
+    font-size: 3rem;
+    letter-spacing: 3px;
+    /* margin-top: 30px; */
+  }
+  .home_customer h1 span{
+    color: #333;
+  }
+  .home_customer button{
+    outline: none;
+    width: 100%;
+    border-radius: 5px;
+    padding: 8px 35px;
+    background: transparent;
+    margin-bottom: 15px;
+  }
+  @media only screen and ( max-width:1236px){
+    .home_customer h1{
+      font-size: 2rem;
+    }
+    .home_kitchen h1{
+      font-size: 2rem;
+    }
+  }
+  @media only screen and (max-width:992px){
+  
+    .home_kitchen{
+      padding: 3rem;
+    }
+    .home_customer{
+      padding: 3rem;
+    }
+  }
+  @media only screen and (max-width:576px){
+    .business{
+      padding: 4px 20px;
+      font-size: 10px;
+    }
+    .home_kitchen{
+      border-radius: 20px 20px 0px 0px;
+    }
+    .popup_para{
+      font-size: 15px;
+    }
+  }
+  @media only screen and (max-width:768px){
+    .popup_para{
+      font-size: 1rem;
+      }
+  }

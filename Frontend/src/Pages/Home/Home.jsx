@@ -30,8 +30,9 @@ export const Home = () => {
   return (
     <>
     {/* <!-- Start of hero session  --> */}
-    <div className="hero">
-        <div className="d-flex flex-column text-center">
+    <div className="hero container">
+      <div className="row">
+        <div className="col-12 col-md-6 d-flex flex-column text-center justify-content-center">
             <p className="mt-4 display-4 text-center p-0 m-1 fw-semibold">Choose your doctor</p>
             <p className="text-center playwritter fs-2 p-0 m-1 fw-bolder ">With confidence</p>
             <p className=" text-center p-0 m-1">Find trusted professionals for your health needs</p>
@@ -41,22 +42,12 @@ export const Home = () => {
                 </div>
             </div>
         </div>
-        <div className="container mt-3">
+        <div className="col">
           <div className=" mt-1 row con img_con text-center">
-            <div className="col-12 col-md-3 col-lg-3 col-xl-3 col-xxl-3 mb-2 p-0 m-0">
-              <img src="doc.svg" alt=""/>
-            </div>
-            <div className="col-12 col-md-3 col-lg-3 col-xl-3 col-xxl-3 mb-2 p-0 m-0">
-              <img src="doc.svg" alt=""/>
-            </div>
-            <div className="col-12 col-md-3 col-lg-3 col-xl-3 col-xxl-3 mb-2 p-0 m-0">
-              <img src="doc.svg" alt=""/>
-            </div>
-            <div className="col-12 col-md-3 col-lg-3 col-xl-3 col-xxl-3 mb-2 p-0 m-0">
-              <img src="doc.svg" alt=""/>
-            </div>
+            <img src="homeright.svg" alt="" className='img-fluid' />
           </div>
         </div>
+      </div>
     </div>
     {/* <!-- End of hero session --> */}
 

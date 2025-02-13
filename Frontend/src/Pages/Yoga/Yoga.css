@@ -1,0 +1,13 @@
+.yoga_input, .yoga_input input{
+    width: 100%;
+    position: sticky;
+    top: 4%;
+    z-index: 9;
+    backdrop-filter: blur(8px);
+    background: transparent;
+    border-radius: 4px;
+}
+.yoga{
+    margin: auto;
+    width: 100%;
+}
