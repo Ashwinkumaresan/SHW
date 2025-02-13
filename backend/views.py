@@ -19,13 +19,13 @@ class Home(APIView):
         user=self.request.user
 
         if user is None or user.is_anonymous:
-            return JsonResponse({"User":"Login"},status=status.HTTP_401_UNAUTHORIZED)
+            return JsonResponse({"User":"Login"},status=status.HTTP_200_OK)
         
         doctor=DoctorProfileModel.objects.filter(User=user)
         if doctor.exists():
             return JsonResponse({"User":"Doctor"},status=status.HTTP_200_OK)
         
-        return JsonResponse({"USer":"Patient"},status=status.HTTP_200_OK)   
+        return JsonResponse({"User":"Patient"},status=status.HTTP_200_OK)   
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer 
