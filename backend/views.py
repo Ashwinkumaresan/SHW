@@ -12,7 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from .serializers import MyTokenObtainPairSerializer
 from .models import UserProfileModel,MedicalRecordModel,BlogModel,DoctorProfileModel
-from .serializers import ProfileSerializer,PaitentRegister,MedicalRecordSerializer,BlogSerializer,DoctorSerializer
+from .serializers import ProfileSerializer,PaitentRegister,MedicalRecordSerializer,BlogSerializer,DoctorSerializer,Meetserializer
 
 class Home(APIView):
     def get(self,request):
@@ -355,9 +355,23 @@ class DeleteBlog(generics.DestroyAPIView):
 
 DeleteBlogClass=DeleteBlog.as_view()
 
+class MeetLink(generics.CreateAPIView):
+    queryset=UserProfileModel
+    serializer_class=Meetserializer
 
-
-
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        medicalID=serializer.validated_data.get('MedicalID')
+        Link=serializer.validated_data.get('Link')
+        qs=UserProfileModel.objects.get(MedicalID=medicalID)
+        qs.Link=Link
+        qs.save()
+        #serializer.save()
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
+MeetLinkClass=MeetLink.as_view()
 
 
 

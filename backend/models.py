@@ -56,6 +56,7 @@ class UserProfileModel(models.Model):
     #MedicalRecord=models.ForeignKey(MedicalRecordModel,on_delete=models.CASCADE,null=True,blank=True)
     QRCode=models.ImageField(null=True,upload_to="QRCode",blank=True)
     ProfilePic=models.ImageField(null=True,blank=True,upload_to="ProfilePic")
+    Link=models.CharField(max_length=100,null=True)
     
 
     
@@ -111,4 +112,4 @@ class BlogModel(models.Model):
 
     def __str__(self):
         return f"{self.pk}){self.Title}-{self.Author.User.username}"
-       
+

@@ -37,7 +37,8 @@ class ProfileSerializer(serializers.ModelSerializer):
            'Address',
            'Country',
            'QRCode',
-           'ProfilePic'
+           'ProfilePic',
+           'Link'
         ]
 
 class PaitentRegister(serializers.ModelSerializer):
@@ -121,3 +122,11 @@ class BlogSerializer(serializers.ModelSerializer):
         ]
 
 
+class Meetserializer(serializers.ModelSerializer):
+
+    class Meta:
+        model=UserProfileModel
+        fields=[
+            'MedicalID',
+            'Link'
+        ]
