@@ -14,6 +14,7 @@ export const Profile = () => {
   const [qrcode, setQrcode] = useState("")
   const [profilePic, setProfilePic] = useState("")
   const [location, setLocation] = useState("")
+  const [link, setLink] = useState("")
 
   const fetchData = async (e) => {
     const token = localStorage.getItem("access_token")
@@ -45,6 +46,7 @@ export const Profile = () => {
       setQrcode(qr)
       setLocation(data.Country)
       setProfilePic(profil_pic)
+      setLink(data.Link)
     }
     catch(error){
       console.log(error)
@@ -134,14 +136,14 @@ export const Profile = () => {
                       </div>
                     </div>
                   </div>
-                  <div className="col-12 col-md-5 rounded offset-md-1 mt-5 mt-md-0 text-center card_profiles d-flex flex-column justify-content-center">
+                  <div className="col-12 col-md-5 rounded offset-md-1 mt-5 mt-md-0 text-center card_profiles">
                     <div className='d-flex justify-content-between mt-2'>
-                        <p className='p-0 m-0 fw-bolder'>Fastband</p>
-                        <a href="#">Edit config</a>
+                        <p className='p-0 m-0 fw-bolder'>Meeting's</p>
                     </div>
                     <hr />
-                    <img src="fastband.png" alt="Fastband" className='img-fluid ' />
-                    <p>Fastrack 2.33.45</p>
+                    {/* <img src="fastband.png" alt="Fastband" className='img-fluid ' /> */}
+                    <a href={link}>hi</a>
+                    <p>{link}</p>
                   </div>
                 </div>
               </div>

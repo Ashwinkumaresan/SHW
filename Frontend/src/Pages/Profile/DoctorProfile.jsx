@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Profile.css"
+import axios from 'axios';
 
 export const DoctorProfile = () => {
   const navigate = useNavigate(); // Ensure it's inside the component
@@ -58,6 +59,15 @@ export const DoctorProfile = () => {
   useEffect(()=>{
     fetchData()
   },[])
+
+  const [formData, setFormData] = useState({
+    MedicalID: "",
+    Link: "",
+});
+// Handle input change
+const handleChange = (e) => {
+  setFormData({ ...formData, [e.target.name]: e.target.value });
+};
   
   //   try {
   //     const response = await fetch(qrcode);
@@ -71,7 +81,7 @@ export const DoctorProfile = () => {
   //     link.click();
   //     document.body.removeChild(link);
   //     URL.revokeObjectURL(url); 
-  //   } catch (error) {
+  //   } catch (error) { 
   //     console.error("Failed to download QR code:", error);
   //   }
   // };
@@ -91,11 +101,38 @@ export const DoctorProfile = () => {
     }
     else
     {
-      document.body.classList.remove('active_modal');
+      document.body.classList.remove('active_modal')
     }
     function Scroll() {
       window.scrollTo(0, 0);
     }
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+
+      try {
+          const response = await axios.post("http://127.0.0.1:8000/meet", formData, {
+              headers: { 
+                  "Content-Type": "application/json",
+                  "Authorization": `Bearer ${localStorage.getItem("access_token")}`,
+              },
+          });
+
+          alert("Data submitted successfully!");
+          console.log(response.data);
+
+          // If the response includes tokens, update localStorage
+          if (response.data.access && response.data.refresh) {
+              localStorage.setItem("access_token", response.data.access);
+              localStorage.setItem("refresh_token", response.data.refresh);
+          }
+          navigate("/doctorprofile")
+
+      } catch (error) {
+          console.error("Error submitting data:", error.response?.data || error.message);
+          alert("Error submitting data");
+      }
+  };
 
   return (
     <>
@@ -105,9 +142,11 @@ export const DoctorProfile = () => {
     <div className="popup_login">
       <button className="X" onClick={()=> setOpenPopup(false)}><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path d="M6.4 19L5 17.6l5.6-5.6L5 6.4L6.4 5l5.6 5.6L17.6 5L19 6.4L13.4 12l5.6 5.6l-1.4 1.4l-5.6-5.6z"/></svg></button>
       <div className="container createmeeting">
-        <input type="text" className='mb-2 rounded p-2' style={{width:"100%"}} placeholder='Enter the patient id'/>
-        <input type="text" className='mb-2 rounded p-2' style={{width:"100%"}} placeholder='Enter the meeting link'/>
-        <button className='btn btn-primary' style={{width:"100%"}}>Send</button>
+        <form >
+          <input type="text" onChange={handleChange} name="MedicalID" value={formData.MedicalID} className='mb-2 rounded p-2' style={{width:"100%"}} placeholder='Enter the patient id'/>
+          <input type="text" onChange={handleChange} name="Link" value={formData.Link} className='mb-2 rounded p-2' style={{width:"100%"}} placeholder='Enter the meeting link'/>
+          <button onClick={handleSubmit} className='btn btn-primary' type='submit' style={{width:"100%"}}>Send</button>
+        </form>
       </div>
     </div>
     }
@@ -184,7 +223,7 @@ export const DoctorProfile = () => {
             <div className="row">
               <div className="col-12 py-2 rounded text-center ">
                 <p className='h5 fs-4 m-0'><span className='fw-bolder'>Doctor ID:</span> {medicalId} </p>
-                <button className='btn btn-primary mt-2' onClick={() => {[setOpenPopup(true), scroll]}}>Create Meeting</button>
+                <button className='btn btn-primary mt-2' onClick={() => {setOpenPopup(true), Scroll()}}>Create Meeting</button>
               </div>
             </div>
             <div className="row">
