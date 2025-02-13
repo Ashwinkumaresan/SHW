@@ -21,6 +21,7 @@ urlpatterns=[
     path('blog/<int:pk>',views.DetailBlogClass,name="Detail blog"),
     path('blog/delete/<int:pk>',views.DeleteBlogClass,name="Delete blog"),
     path('meet',views.MeetLinkClass,name="Meet"),
+    path('meet/remove',views.RemoveLinkClass,name="Remove link"),
 
     
 

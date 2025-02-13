@@ -373,9 +373,19 @@ class MeetLink(generics.CreateAPIView):
     
 MeetLinkClass=MeetLink.as_view()
 
+class RemoveLink(generics.DestroyAPIView):
+    queryset=UserProfileModel
+    serializer_class=Meetserializer
 
+    def delete(self, request, *args, **kwargs):
+        user=self.request.user
+        UserProfile=UserProfileModel.objects.get(User=user)
+        UserProfile.Link=None
+        UserProfile.save()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+        #return super().delete(request, *args, **kwargs)
 
-
+RemoveLinkClass=RemoveLink.as_view()
 
 
 
