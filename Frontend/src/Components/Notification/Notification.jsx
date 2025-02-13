@@ -1,32 +1,66 @@
-import React from 'react'
+import React, { useState } from "react";
 import axios from "axios";
 
 export const Notification = () => {
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [message, setMessage] = useState("");
+    const [response, setResponse] = useState(null);
+    const [error, setError] = useState(null);
 
-function sendSMS() {
-    const options = {
-      method: "POST",
-      url: "https://www.fast2sms.com/dev/bulkV2",
-      headers: {
-        authorization: "2h89FM3ylkb7ilK7PF2CGRhEXhhoiztnMRC7gJrRISUhIJYu9SlWV7R83PkY", // Paste API key here
-        // 2h89FM3ylkb7ilK7PF2CGRhEXhhoiztnMRC7gJrRISUhIJYu9SlWV7R83PkY
-        "Content-Type": "application/json",
-      },
-      data: {
-        route: "v3",
-        sender_id: "TXTIND",
-        message: "This is your reminder!",
-        language: "english",
-        numbers: "9345857852", // Replace with the recipient's phone number
-      },
+    const sendSms = async (e) => {
+        e.preventDefault();
+        setResponse(null);
+        setError(null);
+
+        try {
+            const payload = {
+                message: message,
+                language: "english",
+                route: "q", // "q" or "p" (check Fast2SMS docs)
+                numbers: phoneNumber,
+            };
+
+            console.log("Sending data:", payload);  // Debugging
+
+            const res = await axios.post("http://127.0.0.1:8000/send-sms/", payload, {
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+
+            console.log("Response:", res.data);
+            setResponse(res.data);
+        } catch (err) {
+            setError("Error sending SMS. Check console for details.");
+            console.error("Request Error:", err.response?.data || err);
+        }
     };
-  
-    axios
-      .request(options)
-      .then(() => alert("SMS Sent Successfully!"))
-      .catch((error) => console.error("Error sending SMS:", error));
-  }
-  return (
-    <button onClick={sendSMS}>Send SMS Reminder</button>
-  )
-}
+
+    return (
+        <div>
+            <h2>Send SMS</h2>
+            <form onSubmit={sendSms}>
+                <label>Phone Number:</label>
+                <input
+                    type="text"
+                    value={phoneNumber}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    required
+                />
+
+                <label>Message:</label>
+                <textarea
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    required
+                />
+
+                <button type="submit">Send</button>
+            </form>
+
+            {response && <p className="success">SMS Sent: {JSON.stringify(response)}</p>}
+            {error && <p className="error">{error}</p>}
+        </div>
+    );
+};
+

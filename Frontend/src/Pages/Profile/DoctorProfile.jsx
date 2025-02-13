@@ -9,8 +9,10 @@ export const DoctorProfile = () => {
   const [username, setUsername] = useState("medical id")
   const [gender, setGender] = useState("medical id")
   const [age, setAge] = useState("medical id")
+  const [deg, setDeg] = useState("")
   const [hospitalName, setHospitalName] = useState("medical id")
   const [phoneno, setPhoneNo] = useState("medical id")
+  const [specialization, setSpecialization] = useState("")
   const [profilePic, setProfilePic] = useState("")
   const [location, setLocation] = useState("Location")
 
@@ -29,18 +31,24 @@ export const DoctorProfile = () => {
           },
       })
       const data = await response.json()
+      const profil_pic = `http://127.0.0.1:8000/${data.profile}`
       console.log(data)
+      setHospitalName(data.HospitalName)
+      setMedicalId(data.LicenseNumber)
+      setDeg(data.Degree)
+      setSpecialization(data.Specialization)
+      setGender(data.gender)
+      setUsername(data.userName)
+      setProfilePic(profil_pic)
+      setLocation(data.Location)
       // console.log(data.User)
       // console.log(data.Gender)
       // setMedicalId(data.MedicalID)
-      // setUsername(data.User)
       // setGender(data.Gender)
       // setAge(data.Age)
       // setDob(data.DateOfBirth)
       // setPhoneNo(data.PhoneNumber)
       // setQrcode(qr)
-      // setLocation(data.Country)
-      // setProfilePic(profil_pic)
     }
     catch(error){
       console.log(error)
@@ -97,9 +105,10 @@ export const DoctorProfile = () => {
                   </div>
                   <div className="col-12 col-md-6 p-4 d-flex  justify-content-center flex-column ">
                     <p className='p-2 m-0 fs-5'><span className='fw-bolder'>Username:</span> {username}</p>
-                    <p className='p-2 m-0 fs-5'><span className='fw-bolder'>Doctor ln:</span> {medicalId}</p>
+                    <p className='p-2 m-0 fs-5'><span className='fw-bolder'>Degree:</span> {deg}</p>
                     <p className='p-2 m-0 fs-5'><span className='fw-bolder'>Gender:</span> {gender}</p>
                     <p className='p-2 m-0 fs-5'><span className='fw-bolder'>Hospital name:</span>{hospitalName}</p>
+                    <p className='p-2 m-0 fs-5'><span className='fw-bolder'>Specialization:</span>{specialization}</p>
                     <p className='p-2 m-0 fs-5'><span className='fw-bolder'>Location:</span> {location}</p>
                   </div>
                 </div>

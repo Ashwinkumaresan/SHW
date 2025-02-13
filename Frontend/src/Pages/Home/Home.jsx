@@ -12,7 +12,6 @@ export const Home = () => {
     await axios.get("http://127.0.0.1:8000/").then(
       (response) => {
         console.log(response.data);
-        setUser(response.data.Hello);
       }
     )
   }

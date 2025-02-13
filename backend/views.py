@@ -379,20 +379,45 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 
+FAST2SMS_API_KEY = "DHVNDHvTrhJPXVveJWdxiMSTCoU6Gp6lo2KUr0BE0iJ04K5hJDakjGduuVat"  # 🔥 Replace with your actual API key
+
 @csrf_exempt
 def send_sms(request):
     if request.method == "POST":
         try:
-            data = json.loads(request.body)
+            data = json.loads(request.body)  # Read request body
+            print("Received Data:", data)  # Debugging
+
+            # Validate required fields
+            if "message" not in data or "numbers" not in data:
+                return JsonResponse({"error": "Missing required fields"}, status=400)
+
+            # API Request Payload
+            payload = {
+                "message": data["message"],
+                "language": "english",  # Set your required language
+                "route": "q",  # Fast2SMS requires this
+                "numbers": data["numbers"]
+            }
+
+            # Make request to Fast2SMS API
             response = requests.post(
                 "https://www.fast2sms.com/dev/bulkV2",
                 headers={
-                    "authorization": "YOUR_FAST2SMS_AUTH_KEY",
+                    "authorization": FAST2SMS_API_KEY,  # ✅ Ensure correct API key
                     "Content-Type": "application/json",
                 },
-                json=data,
+                json=payload,  # Send data in JSON format
             )
+
+            print("Fast2SMS Response:", response.json())  # Debugging
             return JsonResponse(response.json(), status=response.status_code)
+
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON format"}, status=400)
+
         except Exception as e:
             return JsonResponse({"error": str(e)}, status=500)
-    return JsonResponse({"error": "Invalid request method"}, status=400)
+
+    return JsonResponse({"error": "Invalid request method"}, status=405)
+
