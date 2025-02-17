@@ -460,31 +460,43 @@ class AppoinmentNotification(generics.ListAPIView):
     
 AppoinmentNotificationClass=AppoinmentNotification.as_view()
 
-class NotificationAccept(generics.RetrieveAPIView):
+# class NotificationAccept(generics.RetrieveAPIView):
+#     queryset=DoctorAppointmentModel
+#     serializer_class=DoctorAppointmentSerializer
+
+#     def get(self, request,MedicalID=None, *args, **kwargs):
+#         qs=DoctorAppointmentModel.objects.get(DoctorAppointmentModel=MedicalID)
+#         qs.Status="Accepted"
+#         #return super().get(request, *args, **kwargs)
+
+# NotificationAcceptClass=NotificationAccept.as_view()
+
+# class NotificationDecline(generics.RetrieveAPIView):
+#     queryset=DoctorAppointmentModel
+#     serializer_class=DoctorAppointmentSerializer
+
+#     def get(self, request,MedicalID=None, *args, **kwargs):
+#         qs=DoctorAppointmentModel.objects.get(DoctorAppointmentModel=MedicalID)
+#         qs.Status="Declined"
+#         #return super().get(request, *args, **kwargs)
+
+# NotificationDeclineClass=NotificationDecline.as_view()
+
+class Status(generics.CreateAPIView):
     queryset=DoctorAppointmentModel
     serializer_class=DoctorAppointmentSerializer
 
-    def get(self, request,MedicalID=None, *args, **kwargs):
-        qs=DoctorAppointmentModel.objects.get(DoctorAppointmentModel=MedicalID)
-        qs.Status="Accepted"
-        #return super().get(request, *args, **kwargs)
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        Patient=serializer.validated_data.get('Patient')
+        Status=serializer.validated_data.get('Status')
+        qs=DoctorAppointmentModel.objects.get(Patient=Patient)
+        qs.Status=Status
+        qs.save()
+        #return super().create(request, *args, **kwargs)
 
-NotificationAcceptClass=NotificationAccept.as_view()
-
-class NotificationDecline(generics.RetrieveAPIView):
-    queryset=DoctorAppointmentModel
-    serializer_class=DoctorAppointmentSerializer
-
-    def get(self, request,MedicalID=None, *args, **kwargs):
-        qs=DoctorAppointmentModel.objects.get(DoctorAppointmentModel=MedicalID)
-        qs.Status="Declined"
-        #return super().get(request, *args, **kwargs)
-
-NotificationDeclineClass=NotificationDecline.as_view()
-
-
-
-
+StatusClass=Status.as_view()
 
 
 

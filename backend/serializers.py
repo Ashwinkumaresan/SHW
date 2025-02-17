@@ -149,3 +149,12 @@ class DoctorAppointmentSerializer(serializers.ModelSerializer):
             'Status',
             'Reason'
         ]
+
+class StatusSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model=DoctorAppointmentModel
+        fields=[
+            'Patient',
+            'Status'
+        ]
