@@ -12,7 +12,7 @@ from rest_framework.permissions import IsAuthenticated
 
 from .serializers import MyTokenObtainPairSerializer
 from .models import UserProfileModel,MedicalRecordModel,BlogModel,DoctorProfileModel,DoctorAppointmentModel
-from .serializers import ProfileSerializer,PaitentRegister,MedicalRecordSerializer,BlogSerializer,DoctorSerializer,Meetserializer,DoctorAppointmentSerializer
+from .serializers import ProfileSerializer,PaitentRegister,MedicalRecordSerializer,BlogSerializer,DoctorSerializer,Meetserializer,DoctorAppointmentSerializer,StatusSerializer
 
 class Home(APIView):
     def get(self,request):
@@ -484,7 +484,7 @@ AppoinmentNotificationClass=AppoinmentNotification.as_view()
 
 class Status(generics.CreateAPIView):
     queryset=DoctorAppointmentModel
-    serializer_class=DoctorAppointmentSerializer
+    serializer_class=StatusSerializer
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
