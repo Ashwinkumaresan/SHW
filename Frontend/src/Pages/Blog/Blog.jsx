@@ -9,12 +9,12 @@ export const Blog = () => {
   const [error, setError] = useState(null); // State for error handling
 
   // Backend API URL
-  const backendUrl = "http://127.0.0.1:8000"; // 🔹 Your Django backend URL
+  const backendUrl = "http://127.0.0.1:8000"; // Your Django backend URL
 
   // Fetch blog data from backend
   useEffect(() => {
     axios
-      .get(`${backendUrl}/blog/`) // 🔹 Correct API endpoint
+      .get(`${backendUrl}/blog/`) // Correct API endpoint
       .then((response) => {
         console.log("API Response:", response.data); // Debugging
         setBlogs(response.data);
@@ -63,41 +63,46 @@ export const Blog = () => {
 
       {/* Display Blogs */}
       <div className="container">
-        {filteredBlogs.length > 0 ? (
-          filteredBlogs.map((blog) => (
-            <div key={blog.pk} className="row blogContent p-4 my-4">
-              <div className="col-12 col-md-6">
-                <div>
-                  <h4 className="fw-bold p-0 m-0">{blog.Title}</h4>
-                  <p className="p-0 m-0 fs-6">{blog.Author}</p>
-                </div>
-                <div className="p-3">
-                  <p className="m-0 p-0 fs-5">{blog.Content}</p>
+        <div className="row ">
+          {filteredBlogs.length > 0 ? (
+            filteredBlogs.map((blog) => (
+              <div key={blog.id} className="col-12 mb-4 l-card">
+                <div className="row align-items-center">
+                  {/* Blog Content Column */}
+                  <div className="col-md-6">
+                    <main className="">
+                      <section className="l-card__text">
+                        <h3>{blog.Title}</h3>
+                        <p>{blog.Content}</p>
+                      </section>
+                      <section className="l-card__user">
+                        <div className="l-card__userInfo">
+                          <span>By: {blog.Author}</span>
+                        </div>
+                      </section>
+                    </main>
+                  </div>
+
+                  {/* Blog Image Column */}
+                  <div className="col-md-6 text-center">
+                    {blog.Image ? (
+                      <img
+                        src={`${backendUrl}${blog.Image}`}
+                        alt={blog.Title}
+                        className="img-fluid rounded shadow"
+                        style={{ maxHeight: "300px", objectFit: "cover" }}
+                      />
+                    ) : (
+                      <p className="text-muted">No Image Available</p>
+                    )}
+                  </div>
                 </div>
               </div>
-              <div className="col">
-                {/* Display Image */}
-                {blog.Image ? (
-                  <img
-                    src={`${backendUrl}${blog.Image}`} // 🔹 Correctly adds backend URL to image path
-                    alt={blog.Title}
-                    className="blog-image mb-3 img-fluid"
-                    style={{ width: "100%", height: "auto", borderRadius: "10px" }}
-                  />
-                ) : (
-                  <img
-                    src="/placeholder.jpg" // 🔹 Replace with your default image
-                    alt="Placeholder"
-                    className="blog-image mb-3 img-fluid"
-                    style={{ width: "100%", height: "auto", borderRadius: "10px" }}
-                  />
-                )}
-              </div>
-            </div>
-          ))
-        ) : (
-          <p className="text-center mt-4">No matching blogs found.</p>
-        )}
+            ))
+          ) : (
+            <p className="text-center mt-4">No matching blogs found.</p>
+          )}
+        </div>
       </div>
     </>
   );

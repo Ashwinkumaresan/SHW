@@ -16,9 +16,10 @@ export const Profile = () => {
   const [profilePic, setProfilePic] = useState("")
   const [location, setLocation] = useState("")
   const [link, setLink] = useState("")
+  const [startstop, setStartStop] = useState()
 
+  const token = localStorage.getItem("access_token")
   const fetchData = async (e) => {
-    const token = localStorage.getItem("access_token")
     if(!token){
       navigate("/login");
       return
@@ -48,6 +49,12 @@ export const Profile = () => {
       setLocation(data.Country)
       setProfilePic(profil_pic)
       setLink(data.Link)
+      // if(data.Link){
+      //   setLink(data.Link)
+      // }
+      // else{
+      //   alert("There is no meeting")
+      // }
     }
     catch(error){
       console.log(error)
@@ -56,7 +63,28 @@ export const Profile = () => {
 
   useEffect(()=>{
     fetchData()
+    // startMerting()
   },[])
+
+  const startMerting = async (e) => {
+    try{
+      const res = await fetch('http://127.0.0.1:8000/profile/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      })
+      const data = await res.json()
+      console.log(data.Link)
+      if(!data.Link){
+        alert("There is no meeting")
+      }
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
   
   const downloadQR = async () => {
     try {
@@ -162,10 +190,13 @@ export const Profile = () => {
                     </div>
                     <hr />
                     <img src="meeting.png" alt="Fastband" className='img-fluid mb-2'  />
-                    <a href={link} style={{width:"100%"}}>
-                      <button className='btn btn-primary' style={{width:"100%"}}>Start Meeting</button>
-                    </a>
-                      <button className='btn btn-outline-danger mt-2' onClick={handleDelete} style={{width:"100%"}}>Stop Meeting</button>
+                    {/* { startstop && } */}
+                    <div>
+                      <a href={link} style={{width:"100%"}} onClick={startMerting}>
+                        <button className='btn btn-primary' style={{width:"100%"}}>Start Meeting</button>
+                      </a>
+                        <button className='btn btn-outline-danger mt-2' onClick={handleDelete} style={{width:"100%"}}>Stop Meeting</button>
+                    </div>
                   </div>
                 </div>
               </div>

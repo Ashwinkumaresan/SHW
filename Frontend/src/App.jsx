@@ -14,6 +14,7 @@ import { Blog } from './Pages/Blog/Blog';
 import { DoctorLogin } from './Pages/Login/DoctorLogin';
 import { BlogWrite } from './Pages/BlogWrite/BlogWrite';
 import { Yoga } from './Pages/Yoga/Yoga';
+import { DoctorsCardProfile } from './Pages/DoctorsProfiles/DoctorsCardProfile';
 
 function App() {
   const WordPage = () => {
@@ -36,6 +37,8 @@ function App() {
         <Route path="/blog" element={ <Blog/> }></Route>
         <Route path="/blogwrite" element={ <BlogWrite/> }></Route>
         <Route path="/mentalhealth" element={ <Yoga/> }></Route>
+
+        <Route path="/doctors/cards/profiles" element={ <DoctorsCardProfile/> }></Route>
 
         <Route path="/notification" element={ <Notification/> }></Route>
       </Routes>

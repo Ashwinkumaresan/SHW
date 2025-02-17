@@ -7,10 +7,8 @@
     width: 100%;
 }
 .nav_center{
-    display: flex;
-    justify-content: center;
-    position: absolute;
-    left: 40%;
+    /* position: absolute;
+    left: 40%; */
 }
 .active_modal{
     overflow-y: hidden;  

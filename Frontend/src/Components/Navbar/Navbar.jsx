@@ -43,7 +43,7 @@ export const Navbar = () => {
 
   return (
     <>
-          <nav class="navbar navbar-expand-lg nav_bar" >
+          <nav class="navbar navbar-expand-lg nav_bar " >
   <div class="container">
     <a class="navbar-brand" href="#">
       <img src="logo.svg" alt="logo" width={150} />
