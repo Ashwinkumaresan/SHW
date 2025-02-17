@@ -416,7 +416,8 @@ class ListDocotor(generics.ListAPIView):
         List=[]
         qs=DoctorProfileModel.objects.all()
         for i in qs:
-            serialize=DoctorSerializer(qs).data
+            serialize=DoctorSerializer(i).data
+            #print(serialize)
             serialize['Name']=i.User.username
             List.append(serialize)
 
