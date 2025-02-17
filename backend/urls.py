@@ -26,8 +26,8 @@ urlpatterns=[
     path('doctor/<str:LicenseNumber>/',views.DoctorDetailClass,name="Doctor Detail"),
     path('Appoinment/',views.AppoinmentClass,name="Appoinment for doctor"),
     path('Appoinment/Notification/',views.AppoinmentNotificationClass,name="Notifications for Doctor"),
-    path('Appoinment/Accept/<str:MedicalID',views.NotificationAcceptClass,name="Notification accept"),
-    path('Appoinment/Decline/<str:MedicalID',views.NotificationAcceptClass,name="Notification decline"),
+    path('Appoinment/Accept/<str:MedicalID>',views.NotificationAcceptClass,name="Notification accept"),
+    path('Appoinment/Decline/<str:MedicalID>',views.NotificationAcceptClass,name="Notification decline"),
 
 
     path("send-sms/", views.send_sms, name="send_sms"),
