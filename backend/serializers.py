@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import UserProfileModel,MedicalRecordModel,BlogModel,DoctorProfileModel
+from .models import UserProfileModel,MedicalRecordModel,BlogModel,DoctorProfileModel,DoctorAppointmentModel
 from django.contrib.auth.models import User
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.http import JsonResponse
@@ -129,4 +129,22 @@ class Meetserializer(serializers.ModelSerializer):
         fields=[
             'MedicalID',
             'Link'
+        ]
+
+class DoctorAppointmentSerializer(serializers.ModelSerializer):
+
+    Patient=serializers.CharField(read_only=True)
+    Status=serializers.CharField(read_only=True)
+    Doctor=serializers.CharField(read_only=True)
+
+
+    class Meta:
+        model=DoctorAppointmentModel
+        fields=[
+            'Doctor',
+            'Patient',
+            'Date',
+            'Time',
+            'Status',
+            'Reason'
         ]

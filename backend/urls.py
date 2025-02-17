@@ -22,7 +22,9 @@ urlpatterns=[
     path('blog/delete/<int:pk>',views.DeleteBlogClass,name="Delete blog"),
     path('meet',views.MeetLinkClass,name="Meet"),
     path('meet/remove',views.RemoveLinkClass,name="Remove link"),
-
+    path('doctor/',views.ListDocotorClass,name="List the doctors"),
+    path('doctor/<str:LicenseNumber>/',views.DoctorDetailClass,name="Doctor Detail"),
+    path('Appoinment/',views.AppoinmentClass,name="Appoinment for doctor"),
     
 
 

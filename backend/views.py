@@ -11,8 +11,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.permissions import IsAuthenticated
 
 from .serializers import MyTokenObtainPairSerializer
-from .models import UserProfileModel,MedicalRecordModel,BlogModel,DoctorProfileModel
-from .serializers import ProfileSerializer,PaitentRegister,MedicalRecordSerializer,BlogSerializer,DoctorSerializer,Meetserializer
+from .models import UserProfileModel,MedicalRecordModel,BlogModel,DoctorProfileModel,DoctorAppointmentModel
+from .serializers import ProfileSerializer,PaitentRegister,MedicalRecordSerializer,BlogSerializer,DoctorSerializer,Meetserializer,DoctorAppointmentSerializer
 
 class Home(APIView):
     def get(self,request):
@@ -387,14 +387,52 @@ class RemoveLink(generics.DestroyAPIView):
 
 RemoveLinkClass=RemoveLink.as_view()
 
+class Appoinment(generics.CreateAPIView):
+    queryset=DoctorAppointmentModel
+    serializer_class=DoctorAppointmentSerializer
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user=self.request.user
+        userprofile=UserProfileModel.objects.get(User=user)
+        paitentid=userprofile.MedicalID
+        Doctor=serializer.validated_data.get('Doctor')
+        doctormodel=DoctorProfileModel.objects.filter(LicenseNumber=Doctor)
+        if not doctormodel.exists():
+            return Response({"Appoinment":"Enter the correct lisence number of the doctor"})
+        serializer.save(Doctor=Doctor,Patient=paitentid,Status="Waiting")
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        #return super().create(request, *args, **kwargs)
 
+AppoinmentClass=Appoinment.as_view()
 
+class ListDocotor(generics.ListAPIView):
+    queryset=DoctorProfileModel.objects.all()
+    serializer_class=DoctorSerializer
 
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
+ListDocotorClass=ListDocotor.as_view()
 
+class DoctorDetail(generics.RetrieveAPIView):
+    queryset=DoctorProfileModel
+    serializer_class=DoctorSerializer
 
-
+    def get(self, request,LicenseNumber=None, *args, **kwargs):
+        if LicenseNumber is None:
+            return Response({"Doctor":"Provide the LicenseNumber"},status=status.HTTP_406_NOT_ACCEPTABLE)
+        doctor=DoctorProfileModel.objects.filter(LicenseNumber=LicenseNumber)
+        if not doctor.exists():
+            return Response({"Doctor":"There is no doctor at the given liscence number!"},status=status.HTTP_204_NO_CONTENT)
+        doctor=DoctorProfileModel.objects.get(LicenseNumber=LicenseNumber)
+        serialize=DoctorSerializer(doctor)
+        return Response(serialize.data,status=status.HTTP_200_OK)
+    
+DoctorDetailClass=DoctorDetail.as_view()
+        
 
 
 

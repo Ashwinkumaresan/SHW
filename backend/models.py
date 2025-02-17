@@ -113,3 +113,14 @@ class BlogModel(models.Model):
     def __str__(self):
         return f"{self.pk}){self.Title}-{self.Author.User.username}"
 
+class DoctorAppointmentModel(models.Model):
+    Doctor=models.CharField(max_length=20,null=True)
+    Patient=models.CharField(max_length=10,null=True)
+    Date=models.DateField(null=True)
+    Time=models.TimeField(null=True)
+    Status=models.CharField(max_length=10,null=True)
+    Reason=models.TextField(null=True)
+
+    def __str__(self):
+        # return super().__str__()
+        return f"{self.Doctor}-{self.Patient}-{self.Status}"	
