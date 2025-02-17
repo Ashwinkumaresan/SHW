@@ -412,8 +412,17 @@ class ListDocotor(generics.ListAPIView):
     queryset=DoctorProfileModel.objects.all()
     serializer_class=DoctorSerializer
 
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+    def get(self, request, *args, **kwargs):
+        List=[]
+        qs=DoctorProfileModel.objects.all()
+        for i in qs:
+            serialize=DoctorSerializer(qs).data
+            serialize['Name']=i.User.username
+            List.append(serialize)
+
+        if List==[]:
+            return Response({"Docotor":"THere no doctor"},status=status.HTTP_204_NO_CONTENT)
+        return Response(List,status=status.HTTP_200_OK)
 
 ListDocotorClass=ListDocotor.as_view()
 
@@ -428,8 +437,9 @@ class DoctorDetail(generics.RetrieveAPIView):
         if not doctor.exists():
             return Response({"Doctor":"There is no doctor at the given liscence number!"},status=status.HTTP_204_NO_CONTENT)
         doctor=DoctorProfileModel.objects.get(LicenseNumber=LicenseNumber)
-        serialize=DoctorSerializer(doctor)
-        return Response(serialize.data,status=status.HTTP_200_OK)
+        serialize=DoctorSerializer(doctor).data
+        serialize['Name']=doctor.User.username
+        return Response(serialize,status=status.HTTP_200_OK)
     
 DoctorDetailClass=DoctorDetail.as_view()
         

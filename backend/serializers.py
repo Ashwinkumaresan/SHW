@@ -63,6 +63,7 @@ class DoctorSerializer(serializers.ModelSerializer):
             'gender',
             "profile",
             'Location',
+            'Bio',
             "Degree",
             "HospitalName",
 

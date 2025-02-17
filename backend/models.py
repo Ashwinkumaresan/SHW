@@ -32,6 +32,7 @@ class DoctorProfileModel(models.Model):
     HospitalName=models.CharField(max_length=100,null=True)
     
     Location=models.CharField(max_length=100,null=True)
+    Bio=models.TextField(null=True,blank=True)
 
     def __str__(self):
         return f"{self.User.username}-{self.LicenseNumber}"
