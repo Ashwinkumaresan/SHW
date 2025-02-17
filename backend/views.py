@@ -400,10 +400,10 @@ class Appoinment(generics.CreateAPIView):
         Doctor=serializer.validated_data.get('Doctor')
         doctormodel=DoctorProfileModel.objects.filter(LicenseNumber=Doctor)
         if not doctormodel.exists():
-            return Response({"Appoinment":"Enter the correct lisence number of the doctor"})
+            return JsonResponse({"Appoinment":"Enter the correct lisence number of the doctor"})
         serializer.save(Doctor=Doctor,Patient=paitentid,Status="Waiting")
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return JsonResponse(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         #return super().create(request, *args, **kwargs)
 
 AppoinmentClass=Appoinment.as_view()
@@ -433,14 +433,14 @@ class DoctorDetail(generics.RetrieveAPIView):
 
     def get(self, request,LicenseNumber=None, *args, **kwargs):
         if LicenseNumber is None:
-            return Response({"Doctor":"Provide the LicenseNumber"},status=status.HTTP_406_NOT_ACCEPTABLE)
+            return JsonResponse({"Doctor":"Provide the LicenseNumber"},status=status.HTTP_406_NOT_ACCEPTABLE)
         doctor=DoctorProfileModel.objects.filter(LicenseNumber=LicenseNumber)
         if not doctor.exists():
-            return Response({"Doctor":"There is no doctor at the given liscence number!"},status=status.HTTP_204_NO_CONTENT)
+            return JsonResponse({"Doctor":"There is no doctor at the given liscence number!"},status=status.HTTP_204_NO_CONTENT)
         doctor=DoctorProfileModel.objects.get(LicenseNumber=LicenseNumber)
         serialize=DoctorSerializer(doctor).data
         serialize['Name']=doctor.User.username
-        return Response(serialize,status=status.HTTP_200_OK)
+        return JsonResponse(serialize,status=status.HTTP_200_OK)
     
 DoctorDetailClass=DoctorDetail.as_view()
         
