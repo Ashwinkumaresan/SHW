@@ -494,6 +494,8 @@ class Status(generics.CreateAPIView):
         qs=DoctorAppointmentModel.objects.get(Patient=Patient)
         qs.Status=Status
         qs.save()
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
         #return super().create(request, *args, **kwargs)
 
 StatusClass=Status.as_view()
