@@ -455,8 +455,8 @@ class AppoinmentNotification(generics.ListAPIView):
         qs=DoctorAppointmentModel.objects.filter(Doctor=LisenceNumber)
         serialize=DoctorAppointmentSerializer(qs,many=True).data
         if serialize==[]:
-            return JsonResponse({"Appoinment":"Currently there is appoinment request"},status=status.HTTP_200_OK)
-        return JsonResponse(serialize,status=status.HTTP_200_OK)
+            return Response({"Appoinment":"Currently there is appoinment request"},status=status.HTTP_200_OK)
+        return Response(serialize,status=status.HTTP_200_OK)
     
 AppoinmentNotificationClass=AppoinmentNotification.as_view()
 
