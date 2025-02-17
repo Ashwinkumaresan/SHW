@@ -460,6 +460,31 @@ class AppoinmentNotification(generics.ListAPIView):
     
 AppoinmentNotificationClass=AppoinmentNotification.as_view()
 
+class NotificationAccept(generics.RetrieveAPIView):
+    queryset=DoctorAppointmentModel
+    serializer_class=DoctorAppointmentSerializer
+
+    def get(self, request,MedicalID=None, *args, **kwargs):
+        qs=DoctorAppointmentModel.objects.get(DoctorAppointmentModel=MedicalID)
+        qs.Status="Accepted"
+        #return super().get(request, *args, **kwargs)
+
+NotificationAcceptClass=NotificationAccept.as_view()
+
+class NotificationDecline(generics.RetrieveAPIView):
+    queryset=DoctorAppointmentModel
+    serializer_class=DoctorAppointmentSerializer
+
+    def get(self, request,MedicalID=None, *args, **kwargs):
+        qs=DoctorAppointmentModel.objects.get(DoctorAppointmentModel=MedicalID)
+        qs.Status="Declined"
+        #return super().get(request, *args, **kwargs)
+
+NotificationDeclineClass=NotificationDecline.as_view()
+
+
+
+
 import requests
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt

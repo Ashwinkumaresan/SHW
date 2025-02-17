@@ -116,7 +116,7 @@ class BlogModel(models.Model):
 
 class DoctorAppointmentModel(models.Model):
     Doctor=models.CharField(max_length=20,null=True)
-    Patient=models.CharField(max_length=10,null=True)
+    DoctorAppointmentModel=models.CharField(max_length=10,null=True)
     Date=models.DateField(null=True)
     Time=models.TimeField(null=True)
     Status=models.CharField(max_length=10,null=True)
