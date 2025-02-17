@@ -147,7 +147,7 @@ export const Home = () => {
         <div className="container">
         <div className="row">
           <div className="col-12 premium_img mt-5 mb-5 img-fluid">
-            {/* <img src="premium_data.svg" className='img-thumbnail mt-5 mb-5' alt="" /> */}
+            <img src="premium_data.svg" className='img-thumbnail mt-5 mb-5' alt="" />
           </div>
         </div>
         </div>

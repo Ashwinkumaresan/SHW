@@ -15,12 +15,17 @@ import { DoctorLogin } from './Pages/Login/DoctorLogin';
 import { BlogWrite } from './Pages/BlogWrite/BlogWrite';
 import { Yoga } from './Pages/Yoga/Yoga';
 import { DoctorsCardProfile } from './Pages/DoctorsProfiles/DoctorsCardProfile';
+import { SeperateDoctor } from './Pages/SeperateDoctor/SeperateDoctor';
 
 function App() {
   const WordPage = () => {
     const { text } = useParams(); // Extract word from route
     return <MedicalRecord word = {text}/> ; // Passing as prop
 };
+//   const WordPage2 = () => {
+//     const { text2 } = useParams(); // Extract word from route
+//     return <SeperateDoctor word = {text2}/> ; // Passing as   prop
+// };
 
   return (
     <>
@@ -33,6 +38,7 @@ function App() {
         <Route path="/doctorlogin" element={ <DoctorLogin/> }></Route>
         <Route path="/signup" element={ <Signup/> }></Route>
         <Route path="/record/detail/:text" element={ < WordPage/> }></Route>
+        <Route path="/doctor/:word2" element={<SeperateDoctor />} />
         <Route path="/recordcreate" element={ <RecordCreate/> }></Route>
         <Route path="/blog" element={ <Blog/> }></Route>
         <Route path="/blogwrite" element={ <BlogWrite/> }></Route>
