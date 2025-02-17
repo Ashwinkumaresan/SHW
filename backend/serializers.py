@@ -136,7 +136,7 @@ class DoctorAppointmentSerializer(serializers.ModelSerializer):
 
     Patient=serializers.CharField(read_only=True)
     Status=serializers.CharField(read_only=True)
-    Doctor=serializers.CharField(read_only=True)
+    # Doctor=serializers.CharField(read_only=True)
 
 
     class Meta:

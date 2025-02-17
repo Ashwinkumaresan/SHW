@@ -422,8 +422,8 @@ class ListDocotor(generics.ListAPIView):
             List.append(serialize)
 
         if List==[]:
-            return Response({"Docotor":"THere no doctor"},status=status.HTTP_204_NO_CONTENT)
-        return Response(List,status=status.HTTP_200_OK)
+            return JsonResponse({"Docotor":"THere no doctor"},status=status.HTTP_204_NO_CONTENT)
+        return JsonResponse(List,status=status.HTTP_200_OK)
 
 ListDocotorClass=ListDocotor.as_view()
 
@@ -444,22 +444,35 @@ class DoctorDetail(generics.RetrieveAPIView):
     
 DoctorDetailClass=DoctorDetail.as_view()
         
+class AppoinmentNotification(generics.ListAPIView):
+    queryset=DoctorAppointmentModel
+    serializer_class=DoctorAppointmentSerializer
 
-
+    def get(self, request, *args, **kwargs):
+        user=self.request.user
+        Doctor=DoctorProfileModel.objects.get(User=user)
+        LisenceNumber=Doctor.LicenseNumber
+        qs=DoctorAppointmentModel.objects.filter(Doctor=LisenceNumber)
+        serialize=DoctorAppointmentSerializer(qs,many=True).data
+        if serialize==[]:
+            return JsonResponse({"Appoinment":"Currently there is appoinment request"},status=status.HTTP_200_OK)
+        return JsonResponse(serialize,status=status.HTTP_200_OK)
+    
+AppoinmentNotificationClass=AppoinmentNotification.as_view()
 
 import requests
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-FAST2SMS_API_KEY = "DHVNDHvTrhJPXVveJWdxiMSTCoU6Gp6lo2KUr0BE0iJ04K5hJDakjGduuVat"  # 🔥 Replace with your actual API key
+FAST2SMS_API_KEY = "DHVNDHvTrhJPXVveJWdxiMSTCoU6Gp6lo2KUr0BE0iJ04K5hJDakjGduuVat"  
 
 @csrf_exempt
 def send_sms(request):
     if request.method == "POST":
         try:
-            data = json.loads(request.body)  # Read request body
-            print("Received Data:", data)  # Debugging
+            data = json.loads(request.body)  
+            print("Received Data:", data)  
 
             # Validate required fields
             if "message" not in data or "numbers" not in data:
@@ -468,8 +481,8 @@ def send_sms(request):
             # API Request Payload
             payload = {
                 "message": data["message"],
-                "language": "english",  # Set your required language
-                "route": "q",  # Fast2SMS requires this
+                "language": "english",  
+                "route": "q",  
                 "numbers": data["numbers"]
             }
 
@@ -477,13 +490,13 @@ def send_sms(request):
             response = requests.post(
                 "https://www.fast2sms.com/dev/bulkV2",
                 headers={
-                    "authorization": FAST2SMS_API_KEY,  # ✅ Ensure correct API key
+                    "authorization": FAST2SMS_API_KEY, 
                     "Content-Type": "application/json",
                 },
-                json=payload,  # Send data in JSON format
+                json=payload,  
             )
 
-            print("Fast2SMS Response:", response.json())  # Debugging
+            print("Fast2SMS Response:", response.json()) 
             return JsonResponse(response.json(), status=response.status_code)
 
         except json.JSONDecodeError:

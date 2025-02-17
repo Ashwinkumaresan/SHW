@@ -25,6 +25,7 @@ urlpatterns=[
     path('doctor/',views.ListDocotorClass,name="List the doctors"),
     path('doctor/<str:LicenseNumber>/',views.DoctorDetailClass,name="Doctor Detail"),
     path('Appoinment/',views.AppoinmentClass,name="Appoinment for doctor"),
+    path('Appoinment/Notification/',views.AppoinmentNotificationClass,name="Notifications for "),
     
 
 
